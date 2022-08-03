@@ -2,6 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 import { SketchPicker, ChromePicker } from 'react-color';
 import styled from 'styled-components'
+import api from '../api/api';
 //Pagina de login/cadastro
 export default function Home() {
 
@@ -18,6 +19,16 @@ export default function Home() {
       a: '1'
     },
   });
+
+  const [registroState, setRegistroState] = useState({
+    nameStore: '',
+    nameUser: '',
+    typeOfStore: '',
+    email: '',
+    password: '',
+    primaryColor: '',
+    secondaryColor: '',
+  });
   const handleClickColor = () => {
     setState1({ ...state1, displayColorPicker: !state1.displayColorPicker });
   };
@@ -29,6 +40,7 @@ export default function Home() {
   const handleChangeColor = (color) => {
     setState1({ ...state1, color: color.rgb });
   };
+
   const [state2, setState2] = useState({
     displayColorPicker: false,
     //cor: "#fff"
@@ -39,6 +51,8 @@ export default function Home() {
       a: '1'
     },
   });
+
+
   const handleClickColor2 = () => {
     setState2({ ...state2, displayColorPicker: !state2.displayColorPicker });
   }
@@ -47,6 +61,26 @@ export default function Home() {
   }
   const handleChangeColor2 = (color) => {
     setState2({ ...state2, color: color.rgb });
+  }
+
+  const handleSubmitCadastar = async (e) => {
+    e.preventDefault();
+    try {
+      //coloco colors dentro do registroState
+      registroState.primaryColor = state1.color.r + ',' + state1.color.g + ',' + state1.color.b;
+      registroState.secondaryColor = state2.color.r + ',' + state2.color.g + ',' + state2.color.b;
+      console.log(registroState);
+      const response = await api.post('/store/', registroState);
+      if(response.status === 200){
+        alert('Cadastro realizado com sucesso!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onChangeRegistro = (e) => {
+    setRegistroState({ ...registroState, [e.target.name]: e.target.value });
   }
 
   return (
@@ -78,15 +112,15 @@ export default function Home() {
          *  */ 
         <div>
           <form>
-            <select>
-              <option value="venda de serviço">Venda de serviço</option>
-              <option value="venda de produto">Venda de produto</option>
-              <option value="vitrine">Vitrine</option>
+            <select value={registroState.typeOfStore} onChange={onChangeRegistro} name="typeOfStore">
+              <option value="serviceSale">Venda de serviço</option>
+              <option value="saleOfProducts">Venda de produto</option>
+              <option value="showcase">Vitrine</option>
             </select>
-            <input type="text" placeholder="Nome da loja" />  
-            <input type="text" placeholder="Nome do usuario" />
-            <input type="text" placeholder="Email do usuario" />
-            <input type="password" placeholder="Senha do usuario" />
+            <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />  
+            <input type="text" placeholder="Nome do usuario" value={registroState.nameUser} name="nameUser" onChange={onChangeRegistro} />
+            <input type="text" placeholder="Email do usuario" value={registroState.email} name="email" onChange={onChangeRegistro} />
+            <input type="password" placeholder="Senha do usuario" value={registroState.password} name="password" onChange={onChangeRegistro} />
             <ContentColorsPicker>
               <div style={{marginBottom: '1rem'}}>
                 <label>Cor primaria</label>
@@ -113,7 +147,10 @@ export default function Home() {
               </div>
             </ContentColorsPicker>
            
-            <button>Cadastrar</button>
+            <button onClick={(e) => {
+              handleSubmitCadastar(e);
+              //setRegistroState({ ...registroState, nameStore: '', nameUser: '', typeOfStore: '', email: '', password: '', primaryColor: '', secondaryColor: '' });
+            }}>Cadastrar</button>
           </form>
         </div>
       )}
