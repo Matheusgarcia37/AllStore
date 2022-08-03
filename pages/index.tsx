@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import api from '../api/api';
 //Pagina de login/cadastro
 export default function Home() {
-
   const [login, setLogin] = useState(true);
   const [registro, setRegistro] = useState(false);
 

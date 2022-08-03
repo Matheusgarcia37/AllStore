@@ -2,6 +2,7 @@ import { createGlobalStyle, ThemeProvider, } from 'styled-components'
 import styled from 'styled-components'
 import Footer from './Footer'
 import Header from './Header'
+import Navbar from './navbar'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -22,13 +23,13 @@ const theme: ThemeInterface = {
     primary: '#a05ed6',
   },
 }
-const site = false
+const site = true
 export default function Layout({ children }) {
   return (
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        {site && <Header />}
+        {site && <Navbar />}
         <Main>{children}</Main>
         {site && <Footer />}
       </ThemeProvider>

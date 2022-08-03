@@ -13,6 +13,7 @@ export default function Index() {
         try {
           const response = await api.get(`/store/${NameStore}`);
           setStore(response.data);
+          console.log(response.data);
         } catch (error) {
           console.log(error);
           setStore({error: true})
