@@ -10,6 +10,7 @@ export default function Footer() {
 
 // create style for footer
 const FooterStyled = styled.footer`
+    border-top: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
