@@ -14,7 +14,7 @@ const FooterStyled = styled.footer`
     align-items: center;
     justify-content: center;
     background: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.secondary};
     p {
         font-size: 1.5rem;
     }

@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 export const NavbarContainer = styled.nav`
   width: 100%;
-  height: ${(props) => (props['data-extendNavbar'] ? "100vh" : "80px")};
-  background-color: black;
+  height: ${(props) => (props['data-extendnavbar'] ? "100vh" : "80px")};
+  background-color: ${({theme}) => theme.colors.primary};
   display: flex;
   flex-direction: column;
   @media (min-width: 700px) {
@@ -37,7 +37,7 @@ export const NavbarLinkContainer = styled.div`
 `;
 
 export const NavbarLink = styled.a`
-  color: white;
+  color: ${({theme}) => theme.colors.secondary};
   font-size: x-large;
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
@@ -45,10 +45,11 @@ export const NavbarLink = styled.a`
   @media (max-width: 700px) {
     display: none;
   }
+  cursor: pointer;
 `;
 
 export const NavbarLinkExtended = styled.a`
-  color: white;
+  color: ${({theme}) => theme.colors.secondary};
   font-size: x-large;
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
@@ -66,7 +67,7 @@ export const OpenLinksButton = styled.button`
   height: 50px;
   background: none;
   border: none;
-  color: white;
+  color: ${({theme}) => theme.colors.secondary};
   font-size: 45px;
   cursor: pointer;
   @media (min-width: 700px) {

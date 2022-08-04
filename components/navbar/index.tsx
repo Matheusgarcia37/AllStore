@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from 'next/image'
 import {
   NavbarContainer,
   LeftContainer,
@@ -18,17 +19,22 @@ function Navbar() {
   const [extendNavbar, setExtendNavbar] = useState(false);
 
   return (
-    <NavbarContainer data-extendNavbar={extendNavbar}>
+    <NavbarContainer data-extendnavbar={extendNavbar}>
       <NavbarInnerContainer>
         <LeftContainer>
           <NavbarLinkContainer>
             <Link href="/">
                 <NavbarLink > Home</NavbarLink>
             </Link>
-           
-            <NavbarLink href="/products"> Products</NavbarLink>
-            <NavbarLink href="/contact"> Contact Us</NavbarLink>
-            <NavbarLink href="/about"> About Us</NavbarLink>
+            <Link href="/kakafestas">
+                <NavbarLink > Products</NavbarLink>
+            </Link>
+            <Link href="/JrAgroPecas">
+                <NavbarLink > Contact Us</NavbarLink>
+            </Link>
+            <Link href="/about">
+                <NavbarLink > About Us</NavbarLink>
+            </Link>
             <OpenLinksButton
               onClick={() => {
                 setExtendNavbar((curr) => !curr);
@@ -39,15 +45,23 @@ function Navbar() {
           </NavbarLinkContainer>
         </LeftContainer>
         <RightContainer>
-          <Logo src={LogoImg}></Logo>
+          <Image src={LogoImg} width={50}/>
         </RightContainer>
       </NavbarInnerContainer>
       {extendNavbar && (
         <NavbarExtendedContainer>
-          <NavbarLinkExtended href="/"> Home</NavbarLinkExtended>
-          <NavbarLinkExtended href="/products"> Products</NavbarLinkExtended>
-          <NavbarLinkExtended href="/contact"> Contact Us</NavbarLinkExtended>
-          <NavbarLinkExtended href="/about"> About Us</NavbarLinkExtended>
+          <Link href="/">
+                <NavbarLinkExtended > Home</NavbarLinkExtended>
+            </Link>
+            <Link href="/kakafestas">
+                <NavbarLinkExtended > Products</NavbarLinkExtended>
+            </Link>
+            <Link href="/JrAgroPecas">
+                <NavbarLinkExtended > Contact Us</NavbarLinkExtended>
+            </Link>
+            <Link href="/about">
+                <NavbarLinkExtended > About Us</NavbarLinkExtended>
+            </Link>
         </NavbarExtendedContainer>
       )}
     </NavbarContainer>

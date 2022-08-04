@@ -7,26 +7,6 @@ export default function Index() {
   const router = useRouter();
   const NameStore = router.query.store;
   const [store, setStore] = useState(null);
-  useEffect(() => {
-    const getStore = async () => {
-      if (NameStore) {
-        try {
-          const response = await api.get(`/store/${NameStore}`);
-          setStore(response.data);
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
-          setStore({error: true})
-        }
-        // setStore(storeResponse);
-        // console.log(storeResponse);
-      }
-    }
-    setTimeout(() => {
-      getStore();
-    }, 0);
-    //getStore();
-  }, [NameStore]);
 
   return (
     store ? (
