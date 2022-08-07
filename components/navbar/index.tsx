@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image'
 import {
   NavbarContainer,
@@ -11,59 +11,132 @@ import {
   Logo,
   OpenLinksButton,
   NavbarLinkExtended,
+  NavbarExtendedLinkContainer,
+  NavBarExtendedFadeContainer,
+  NavbarLinkCloseExtended,
+  RedesSociaisBarExtended,
+  NavbarExtendedLinksContainer,
+  NavbarContainerContent,
+  NavBarHeaderContact,
+  NavBarHeaderContactRight,
+  NavBarHeaderContactLeft,
 } from "./NavbarElements";
+import { AiOutlineFacebook, AiOutlineHome, AiOutlineInstagram, AiOutlineMail, AiOutlinePhone, AiOutlineTwitter } from 'react-icons/ai'
+import { BsBag, BsBook } from 'react-icons/bs'
+import { IoMdContact } from 'react-icons/io'
 import Link from 'next/link'
 import LogoImg from "../../images/logo.svg";
+import api from "../../api/api";
+import { useRouter } from "next/router";
 
 function Navbar() {
   const [extendNavbar, setExtendNavbar] = useState(false);
+  
+  const router = useRouter();
+  const NameStore = router.query.store;
+  const store = JSON.parse(localStorage.getItem('store'));
+
 
   return (
     <NavbarContainer data-extendnavbar={extendNavbar}>
       <NavbarInnerContainer>
-        <LeftContainer>
-          <NavbarLinkContainer>
-            <Link href="/">
-                <NavbarLink > Home</NavbarLink>
-            </Link>
-            <Link href="/kakafestas">
-                <NavbarLink > Products</NavbarLink>
-            </Link>
-            <Link href="/JrAgroPecas">
-                <NavbarLink > Contact Us</NavbarLink>
-            </Link>
-            <Link href="/about">
-                <NavbarLink > About Us</NavbarLink>
-            </Link>
-            <OpenLinksButton
-              onClick={() => {
-                setExtendNavbar((curr) => !curr);
-              }}
-            >
-              {extendNavbar ? <>&#10005;</> : <> &#8801;</>}
-            </OpenLinksButton>
-          </NavbarLinkContainer>
-        </LeftContainer>
-        <RightContainer>
-          <Image src={LogoImg} width={50}/>
-        </RightContainer>
+        <NavBarHeaderContact>
+          <NavBarHeaderContactLeft>
+            <a href="#">
+              <AiOutlineFacebook size={20} />
+            </a>
+            <a href="#">       
+              <AiOutlineTwitter size={20} />
+            </a>
+            <a href="#">
+              <AiOutlineInstagram size={20} />
+            </a>
+          </NavBarHeaderContactLeft>
+          <NavBarHeaderContactRight>
+            <p>
+              <AiOutlinePhone size={20} />
+              (11) 99999-9999
+            </p>
+            <p>
+              <AiOutlineMail size={20} />
+              {store?.User[0]?.email}
+            </p>
+          </NavBarHeaderContactRight>
+        </NavBarHeaderContact>
+        <NavbarContainerContent>
+          <LeftContainer>
+            <NavbarLinkContainer>
+              <Link href={`/${NameStore}`}>
+                <NavbarLink >Home</NavbarLink>
+              </Link>
+              <Link  href={`/${NameStore}`}>
+                <NavbarLink >Produtos</NavbarLink>
+              </Link>
+              <Link  href={`/${NameStore}`}>
+                <NavbarLink >Contato</NavbarLink>
+              </Link>
+              <Link  href={`/${NameStore}`}>
+                <NavbarLink >Sobre</NavbarLink>
+              </Link>
+              <OpenLinksButton
+                onClick={() => {
+                  setExtendNavbar((curr) => !curr);
+                }}
+              >
+                &#8801;
+              </OpenLinksButton>
+            </NavbarLinkContainer>
+          </LeftContainer>
+          <RightContainer>
+            <Image src={LogoImg} width={50} />
+          </RightContainer>
+        </NavbarContainerContent> 
       </NavbarInnerContainer>
+      <NavbarExtendedContainer data-extendnavbar={extendNavbar}>
+        <NavbarExtendedLinkContainer data-extendnavbar={extendNavbar}>
+          <NavbarExtendedLinksContainer>
+            <Link href={`/${NameStore}`} >
+              <NavbarLinkExtended > <AiOutlineHome></AiOutlineHome>Home</NavbarLinkExtended>
+            </Link>
+            <Link href={`/${NameStore}`}>
+              <NavbarLinkExtended ><BsBag></BsBag>Produtos</NavbarLinkExtended>
+            </Link>
+            <Link  href={`/${NameStore}`}>
+              <NavbarLinkExtended ><IoMdContact></IoMdContact>Contato</NavbarLinkExtended>
+            </Link>
+            <Link  href={`/${NameStore}`}>
+              <NavbarLinkExtended ><BsBook></BsBook>Sobre</NavbarLinkExtended>
+            </Link>
+          </NavbarExtendedLinksContainer>
+          <RedesSociaisBarExtended>
+            <Link href="#">
+              <a>
+                <AiOutlineFacebook size={30} />
+              </a>
+            </Link>
+            <Link href="#">
+              <a > 
+              <AiOutlineInstagram size={30} />
+              </a>
+            </Link>
+            <Link href="#">
+              <a>
+                <AiOutlineTwitter size={30} />
+              </a>
+            </Link>
+          </RedesSociaisBarExtended>
+        </NavbarExtendedLinkContainer>
+      </NavbarExtendedContainer>
       {extendNavbar && (
-        <NavbarExtendedContainer>
-          <Link href="/">
-                <NavbarLinkExtended > Home</NavbarLinkExtended>
-            </Link>
-            <Link href="/kakafestas">
-                <NavbarLinkExtended > Products</NavbarLinkExtended>
-            </Link>
-            <Link href="/JrAgroPecas">
-                <NavbarLinkExtended > Contact Us</NavbarLinkExtended>
-            </Link>
-            <Link href="/about">
-                <NavbarLinkExtended > About Us</NavbarLinkExtended>
-            </Link>
-        </NavbarExtendedContainer>
-      )}
+        <NavBarExtendedFadeContainer data-extendnavbar={extendNavbar}>
+          <NavbarLinkCloseExtended onClick={() => {
+            setExtendNavbar((curr) => !curr);
+          }
+          }>
+            {/* simbolo X */}
+            &#10006;
+          </NavbarLinkCloseExtended>
+        </NavBarExtendedFadeContainer>)}
     </NavbarContainer>
   );
 }

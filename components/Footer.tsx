@@ -10,16 +10,13 @@ export default function Footer() {
 
 // create style for footer
 const FooterStyled = styled.footer`
-    border-top: 1px solid black;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.secondary};
     p {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
-    position: absolute;
-    bottom: 0;
     width: 100%;
 `;

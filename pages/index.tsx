@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
 import { SketchPicker, ChromePicker } from 'react-color';
 import styled from 'styled-components'
 import api from '../api/api';
+import { AuthContext } from '../contexts/AuthContext';
 //Pagina de login/cadastro
 export default function Home() {
+
+  const { signIn } = useContext(AuthContext);
+
   const [login, setLogin] = useState(true);
   const [registro, setRegistro] = useState(false);
 
@@ -22,12 +26,18 @@ export default function Home() {
   const [registroState, setRegistroState] = useState({
     nameStore: '',
     nameUser: '',
-    typeOfStore: '',
+    typeOfStore: 'serviceSale',
     email: '',
     password: '',
     primaryColor: '',
     secondaryColor: '',
   });
+
+  const [loginState, setLoginState] = useState({
+    username: '',
+    password: '',
+  });
+
   const handleClickColor = () => {
     setState1({ ...state1, displayColorPicker: !state1.displayColorPicker });
   };
@@ -82,6 +92,20 @@ export default function Home() {
     setRegistroState({ ...registroState, [e.target.name]: e.target.value });
   }
 
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await signIn({username: loginState.username, password: loginState.password});
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onChangeLogin = (e) => {
+    setLoginState({ ...loginState, [e.target.name]: e.target.value });
+  }
+
   return (
     <Login_Registro data-setcolor={{color1: state1.color, color2: state2.color}}>
       <ContentbuttonChoose data-setcolor={{color1: state1.color, color2: state2.color}}>
@@ -91,9 +115,9 @@ export default function Home() {
       {login && (
         <div>
           <form>
-            <input type="text" placeholder="Usuário" />
-            <input type="password" placeholder="Senha" />
-            <button>Entrar</button>
+            <input type="text" placeholder="Usuário" name='username' value={loginState.username} onChange={onChangeLogin}/>
+            <input type="password" placeholder="Senha" name="password" value={loginState.password} onChange={onChangeLogin}/>
+            <button onClick={handleSubmitLogin}>Entrar</button>
           </form>
         </div>
       )}

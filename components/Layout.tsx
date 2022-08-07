@@ -5,12 +5,14 @@ import styled from 'styled-components'
 import Footer from './Footer'
 import Navbar from './navbar'
 import { useEffect, useState } from 'react'
+import { createContext } from 'vm';
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
   }
 `
 
@@ -21,12 +23,14 @@ interface ThemeInterface {
   }
 }
 
+
 // const theme: ThemeInterface = {
 //   colors: {
 //     primary: '#161616',
 //     secondary: '#fff'
 //   },
 // }
+
 
 export default function Layout({ children }) {
   const router = useRouter();
@@ -86,7 +90,7 @@ export default function Layout({ children }) {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         {isStore && <Navbar />}
-        <Main>{children}</Main>
+        <Main >{children}</Main>
         {isStore && <Footer />}
       </ThemeProvider>
     </>
