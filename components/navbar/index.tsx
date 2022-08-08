@@ -28,13 +28,14 @@ import Link from 'next/link'
 import LogoImg from "../../images/logo.svg";
 import api from "../../api/api";
 import { useRouter } from "next/router";
+import { StoreContext } from "../../components/Layout";
 
 function Navbar() {
   const [extendNavbar, setExtendNavbar] = useState(false);
   
   const router = useRouter();
   const NameStore = router.query.store;
-  const store = JSON.parse(localStorage.getItem('store'));
+  const store = React.useContext(StoreContext);
 
 
   return (

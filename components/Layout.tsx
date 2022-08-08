@@ -4,8 +4,8 @@ import api from '../api/api';
 import styled from 'styled-components'
 import Footer from './Footer'
 import Navbar from './navbar'
-import { useEffect, useState } from 'react'
-import { createContext } from 'vm';
+import { useEffect, useState, createContext } from 'react'
+import NavbarAdmin from './navbarAdmin';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -23,7 +23,14 @@ interface ThemeInterface {
   }
 }
 
+interface StoreInterface {
+  id: string,
+  name: string,
+  typeOfStore: string,
+}
 
+//criar contexto para store
+export const StoreContext = createContext({} as any);
 // const theme: ThemeInterface = {
 //   colors: {
 //     primary: '#161616',
@@ -32,9 +39,10 @@ interface ThemeInterface {
 // }
 
 
-export default function Layout({ children }) {
+export function Layout({ children }) {
   const router = useRouter();
   const NameStore = router.query.store;
+  const acessAdmin = router.pathname.includes("/admin");
 
   const [theme, setTheme] = useState({
     colors: {
@@ -42,11 +50,30 @@ export default function Layout({ children }) {
       secondary: '#fff'
     },
   })
-  const [isStore, setIsStore] = useState(false)
+  const [store, setStore] = useState(null)
 
   useEffect(() => {
     const configStore = async () => {
-      const existStore = localStorage.getItem('store');
+      if (NameStore) {
+        try {
+          const { data: store } = await api.get(`/store/${NameStore}`);
+          console.log(store)
+          setTheme({
+            colors: {
+              primary: `Rgb(${store.Theme.primaryColor})`,
+              secondary: `Rgb(${store.Theme.secondaryColor})`
+            }
+          })
+          //localStorage.setItem("store", JSON.stringify(store))
+          setStore(store)
+        } catch (error) {
+          console.log(error);
+          setStore(null)
+        }
+      } else {
+        setStore(null)
+      }
+     /*  const existStore = localStorage.getItem('store');
       if(!existStore){
         if (NameStore) {
           try {
@@ -59,7 +86,7 @@ export default function Layout({ children }) {
               }
             })
             localStorage.setItem("store", JSON.stringify(store))
-            setIsStore(true)
+            setStore(store)
           } catch (error) {
             console.log(error);
           }
@@ -77,27 +104,33 @@ export default function Layout({ children }) {
                 secondary: `Rgb(${store.Theme.secondaryColor})`
               }
             })
-            setIsStore(true)
+            setStore(store)
           } 
         }
-      }
+      } */
     }
     configStore()
   }, [NameStore])
 
   return (
-    <>
+    <StoreContext.Provider value={store}>
       <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        {isStore && <Navbar />}
-        <Main >{children}</Main>
-        {isStore && <Footer />}
+      { !acessAdmin ? (
+        <ThemeProvider theme={theme}>
+        {store && <Navbar />}
+        <Main>{children}</Main>
+        {store && <Footer />}
       </ThemeProvider>
-    </>
+      ) : (
+        <NavbarAdmin>
+          <Main>{children}</Main>
+        </NavbarAdmin>
+      )} 
+      
+    </StoreContext.Provider>
   )
 }
 
-// create style for main
 const Main = styled.main`
-    padding: 20px;
-`;
+padding: 15px;
+`

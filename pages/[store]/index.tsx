@@ -1,42 +1,11 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import api from '../../api/api';
+import { StoreContext } from '../../components/Layout';
 import { ContainerIndex, FeaturedProducts } from './IndexElements';
 
 export default function Index() {
-  // pego store da url
-  const router = useRouter();
-  const NameStore = router.query.store;
-  //const store = JSON.parse(localStorage.getItem('store'));
-  const [store, setStore] = useState(null);
-  useEffect(() => {
-    const configStore = async () => {
-      const existStore = localStorage.getItem('store');
-      if(!existStore){
-        if (NameStore) {
-          try {
-            const { data: store } = await api.get(`/store/${NameStore}`);    
-            localStorage.setItem("store", JSON.stringify(store))
-            setStore(store)
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      } else {
-        if(NameStore){
-          const store = JSON.parse(existStore);
-          if(store.name !== NameStore){
-            localStorage.removeItem("store")
-            configStore()
-          } else {
-            setStore(store)
-          } 
-        }
-      }
-    }
-    configStore()
-  }, [NameStore])
-
+  const store = useContext(StoreContext);
   const produtosFake = [
     {
       id: 1,
