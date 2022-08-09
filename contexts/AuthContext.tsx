@@ -9,7 +9,7 @@ type FormLogin = {
 type User = {
     id: string;
     username: string;
-}
+} | any;
 type AuthContextType = {
     user: User | null;
     isAuthenticated: boolean;
