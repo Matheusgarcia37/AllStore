@@ -27,6 +27,7 @@ export default function Home() {
     nameStore: '',
     nameUser: '',
     typeOfStore: 'serviceSale',
+    about: '',
     email: '',
     password: '',
     primaryColor: '',
@@ -122,17 +123,6 @@ export default function Home() {
         </div>
       )}
       {registro && (
-        /**
-         * Cadastra informações da loja e do usuario
-         * campos
-         * nome da loja
-         * tipo de loja (venda de serviço, venda de produto, vitrine)
-         * cor primaria da loja
-         * cor secundaria da loja
-         * nome do usuario
-         * email do usuario
-         * senha do usuario
-         *  */ 
         <div>
           <form>
             <select value={registroState.typeOfStore} onChange={onChangeRegistro} name="typeOfStore">
@@ -140,7 +130,9 @@ export default function Home() {
               <option value="saleOfProducts">Venda de produto</option>
               <option value="showcase">Vitrine</option>
             </select>
-            <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />  
+            <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />
+            {/* sobre */}
+            <textarea placeholder="Sobre" value={registroState.about} name="about" onChange={onChangeRegistro} />  
             <input type="text" placeholder="Nome do usuario" value={registroState.nameUser} name="nameUser" onChange={onChangeRegistro} />
             <input type="text" placeholder="Email do usuario" value={registroState.email} name="email" onChange={onChangeRegistro} />
             <input type="password" placeholder="Senha do usuario" value={registroState.password} name="password" onChange={onChangeRegistro} />
@@ -212,6 +204,19 @@ const Login_Registro = styled.div`
             margin-bottom: 10px;
             &:focus {
                 outline: none;
+            }
+            box-sizing: border-box;
+        }
+        textArea {
+            width: 100%;
+            height: 3rem;
+            font-size: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 0 10px;
+            margin-bottom: 10px;
+            &:focus {
+              outline: none;
             }
             box-sizing: border-box;
         }

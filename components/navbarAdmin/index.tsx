@@ -6,6 +6,8 @@ import { BiLogOut } from 'react-icons/bi';
 import { VscSignIn } from 'react-icons/vsc';
 import { StoreContext } from '../Layout';
 import { AiOutlineRight } from 'react-icons/ai';
+import { MdStorefront } from 'react-icons/md';
+import {BsBag} from 'react-icons/bs';
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
     
@@ -24,8 +26,13 @@ export default function NavbarAdmin( { children } ) {
                 </HeaderMenu>     
                 <Items>
                     <Item>
+                        <Link href="/admin/store">
+                            <a><MdStorefront/> Loja <AiOutlineRight/></a>
+                        </Link>
+                    </Item>
+                    <Item>
                         <Link href="/admin/products">
-                            <a>Produtos <AiOutlineRight/></a>
+                            <a><BsBag/> Produtos <AiOutlineRight/></a>
                         </Link>
                     </Item>
                 </Items>
@@ -165,13 +172,16 @@ const Item = styled.div`
     a {
         display: flex;
         align-items: center;
+        width: 60%;
+        justify-content: space-between;
+      
         color: black;
         font-size: .9rem;
         font-weight: bold;
         text-decoration: none;
 
         svg{
-            margin-left: 10px;
+           
         }
         :hover {
             opacity: 0.8;
