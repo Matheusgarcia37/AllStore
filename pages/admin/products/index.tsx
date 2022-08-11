@@ -1,9 +1,37 @@
 import styled from 'styled-components';
+import Link from 'next/link';
+import { MdAdd } from 'react-icons/md';
+import { useContext, useEffect, useState } from 'react';
+import api from '../../../api/api';
+import { AuthContext } from '../../../contexts/AuthContext';
 export default function Products(){
+    const [products, setProducts] = useState([]);
+    const { user } = useContext(AuthContext);
+    useEffect(() => {
+        const getProducts = async () => {
+            const response = await api.get('/products', user?.Store.id);
+            setProducts(response.data);
+        }
+        getProducts();
+    } , []);
+
+    const deleteProduct = async (id) => {
+        await api.delete(`/products/${id}`);
+        const response = await api.get('/products', user?.Store.id);
+        setProducts(response.data);
+    }
     return (
         <Container> 
            <HeaderPage>
                 <h1>Produtos</h1>
+                <Link href="/admin/products/new">
+                    <a>
+                        <Button>
+                            <MdAdd size={20} color="#fff" />
+                            <span>Novo Produto</span>
+                        </Button>
+                    </a>
+                </Link>
            </HeaderPage>
             <Content>
                 <Table>
@@ -16,7 +44,7 @@ export default function Products(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {/* <tr>
                             <td>Camiseta</td>
                             <td>R$ 50,00</td>
                             <td>Manga longa</td>
@@ -24,7 +52,23 @@ export default function Products(){
                                 <ButtonEdit>Editar</ButtonEdit>
                                 <ButtonDelete>Excluir</ButtonDelete>
                             </td>
-                        </tr>
+                        </tr> */}
+                        {products.map((product) => (
+                            console.log(product),
+                            <tr key={product.id}>
+                                <td>{product.name}</td>
+                                <td>{product.price}</td>
+                                <td>{product.Tag[0].name}</td>
+                                <td>
+                                    <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
+                                        <a>
+                                            <ButtonEdit>Editar</ButtonEdit>
+                                        </a>
+                                    </Link>
+                                    <ButtonDelete onClick={() => { deleteProduct(product.id) }} >Excluir</ButtonDelete>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </Content>
@@ -53,6 +97,17 @@ const HeaderPage = styled.div`
         font-weight: bold;
         color: black;
         text-transform: uppercase;
+    }
+        a {
+            text-decoration: none;
+            Button {
+            display: flex;
+            align-items: center;
+            background-color: ${({theme}) => `RGB(${theme.colors.secondary})`};
+            svg {
+                margin-right: 0.5rem;
+            }
+        }
     }
 `;
 const Content = styled.div`
@@ -93,7 +148,7 @@ const Table = styled.table`
 
 const Button = styled.button`
     border: none;
-    background-color: ${({theme}) => theme.colors.primary};
+    background-color: ${({theme}) => `RGB(${theme.colors.primary})`};
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
