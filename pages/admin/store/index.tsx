@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../../../contexts/AuthContext';
+import api from '../../../api/api';
 export default function Index(){
+
+    const { user } = useContext(AuthContext);
 
     const [addresses, setAddress] = useState([{
         main: false,
@@ -80,6 +86,35 @@ export default function Index(){
     const handleStore = (e) => {
         setStore({ ...store, [e.target.name]: e.target.value });
     }
+
+    useEffect(() => {
+        if(user) {
+          const getStore = async () => {
+              const { data } = await api.get('/store/getById/' + user.Store.id);
+              setStore({
+                nameStore: data.name,
+                typeOfStore: data.typeOfStore,
+                about: data.about,
+                primaryColor: data.Theme.primaryColor,
+                secondaryColor: data.Theme.secondaryColor,
+              });
+            setContacts(data.Contact.map((contact) => ({
+                main: contact.main,
+                email: contact.email,
+                phone: contact.phone,
+            })));
+            setAddress(data.Address.map((address) => ({
+                main: address.main,
+                street: address.street,
+                city: address.city,
+                state: address.state,
+                number: address.number,
+                zip: address.zip,
+            })));
+            }
+            getStore();
+        }
+      }, [user]);
 
     return (
         <Container> 
