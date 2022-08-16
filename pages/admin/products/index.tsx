@@ -7,10 +7,12 @@ import { AuthContext } from '../../../contexts/AuthContext';
 export default function Products(){
     const [products, setProducts] = useState([]);
     const { user } = useContext(AuthContext);
+    const [ skip, setSkip ] = useState(0);
     useEffect(() => {
         const getProducts = async () => {
             const response = await api.get('/products', user?.Store.id);
-            setProducts(response.data);
+            console.log(response.data);
+            setProducts(response.data[1]);
         }
         getProducts();
     } , []);
