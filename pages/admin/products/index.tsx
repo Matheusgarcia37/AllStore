@@ -4,18 +4,44 @@ import { MdAdd } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
 import api from '../../../api/api';
 import { AuthContext } from '../../../contexts/AuthContext';
-export default function Products(){
+export default function Products() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(AuthContext);
-    const [ skip, setSkip ] = useState(0);
+    const [skip, setSkip] = useState(0);
+    const [limit, setLimit] = useState(3);
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     useEffect(() => {
-        const getProducts = async () => {
-            const response = await api.get('/products', user?.Store.id);
-            console.log(response.data);
-            setProducts(response.data[1]);
+        if (user) {
+            const getProducts = async () => {
+                const response = await api.put('/products', {
+                    storeId: user?.Store.id,
+                    skip: skip,
+                    limit: limit
+                });
+                setTotalProducts(response.data[0]);
+                setTotalPages(Math.ceil(response.data[0] / limit));
+                setProducts(response.data[1]);
+            }
+            getProducts();
         }
-        getProducts();
-    } , []);
+    }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            const getProducts = async () => {
+                const response = await api.put('/products', {
+                    storeId: user?.Store.id,
+                    skip: skip,
+                    limit: limit
+                });
+                setTotalProducts(response.data[0]);
+                setTotalPages(Math.ceil(response.data[0] / limit));
+                setProducts(response.data[1]);
+            }
+            getProducts();
+        }
+    }, [skip, limit]);
 
     const deleteProduct = async (id) => {
         await api.delete(`/products/${id}`);
@@ -23,30 +49,31 @@ export default function Products(){
         setProducts(response.data);
     }
     return (
-        <Container> 
-           <HeaderPage>
-                <h1>Produtos</h1>
-                <Link href="/admin/products/new">
-                    <a>
-                        <Button>
-                            <MdAdd size={20} color="#fff" />
-                            <span>Novo Produto</span>
-                        </Button>
-                    </a>
-                </Link>
-           </HeaderPage>
-            <Content>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Preço</th>
-                            <th>Categoria</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* <tr>
+        <>
+            <Container>
+                <HeaderPage>
+                    <h1>Produtos</h1>
+                    <Link href="/admin/products/new">
+                        <a>
+                            <Button>
+                                <MdAdd size={20} color="#fff" />
+                                <span>Novo Produto</span>
+                            </Button>
+                        </a>
+                    </Link>
+                </HeaderPage>
+                <Content>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Preço</th>
+                                <th>Categoria</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* <tr>
                             <td>Camiseta</td>
                             <td>R$ 50,00</td>
                             <td>Manga longa</td>
@@ -55,26 +82,36 @@ export default function Products(){
                                 <ButtonDelete>Excluir</ButtonDelete>
                             </td>
                         </tr> */}
-                        {products.map((product) => (
-                            console.log(product),
-                            <tr key={product.id}>
-                                <td>{product.name}</td>
-                                <td>{product.price}</td>
-                                <td>{product.Tag[0].name}</td>
-                                <td>
-                                    <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
-                                        <a>
-                                            <ButtonEdit>Editar</ButtonEdit>
-                                        </a>
-                                    </Link>
-                                    <ButtonDelete onClick={() => { deleteProduct(product.id) }} >Excluir</ButtonDelete>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </Content>
-        </Container>
+                            {products.map((product) => (
+                                <tr key={product.id}>
+                                    <td>{product.name}</td>
+                                    <td>{product.price}</td>
+                                    <td>{product.Tag[0]?.name}</td>
+                                    <td>
+                                        <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
+                                            <a>
+                                                <ButtonEdit>Editar</ButtonEdit>
+                                            </a>
+                                        </Link>
+                                        <ButtonDelete onClick={() => { deleteProduct(product.id) }} >Excluir</ButtonDelete>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Content>
+            </Container>
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <Pagination>
+                    <button onClick={() => { setSkip(skip - limit) }} disabled={skip === 0}>Anterior</button>
+                    {Array.from(Array(totalPages).keys()).map((page) => (
+                        <button key={page} onClick={() => { setSkip(page * limit) }}>{page + 1}</button>
+                    ))}
+                    <button onClick={() => {setSkip(skip + limit) }} disabled={(skip + limit) >= totalProducts}>Próximo</button>
+                </Pagination>
+            )}
+        </>
     );
 }
 
@@ -105,7 +142,7 @@ const HeaderPage = styled.div`
             Button {
             display: flex;
             align-items: center;
-            background-color: ${({theme}) => `RGB(${theme.colors.secondary})`};
+            background-color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
             svg {
                 margin-right: 0.5rem;
             }
@@ -150,7 +187,7 @@ const Table = styled.table`
 
 const Button = styled.button`
     border: none;
-    background-color: ${({theme}) => `RGB(${theme.colors.primary})`};
+    background-color: ${({ theme }) => `RGB(${theme.colors.primary})`};
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
@@ -165,7 +202,7 @@ const ButtonDelete = styled.button`
     cursor: pointer;
     margin-left: 1rem;
     border: none;
-    background-color: ${({theme}) => `Rgb(${theme.colors.secondary})`};
+    background-color: ${({ theme }) => `Rgb(${theme.colors.secondary})`};
     color: white;
     font-size: 1rem;
     font-weight: bold;
@@ -178,7 +215,7 @@ const ButtonDelete = styled.button`
 const ButtonEdit = styled.button`
     cursor: pointer;
     border: none;
-    background-color: ${({theme}) => `Rgb(${theme.colors.secondary})`};
+    background-color: ${({ theme }) => `Rgb(${theme.colors.secondary})`};
     color: white;
     font-size: 1rem;
     font-weight: bold;
@@ -190,7 +227,7 @@ const ButtonEdit = styled.button`
 `;
 const ButtonAdd = styled.button`
     border: none;
-    background-color: ${({theme}) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.primary};
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
@@ -198,5 +235,30 @@ const ButtonAdd = styled.button`
     border-radius: 5px;
     &:hover {
         opacity: 0
+    }
+`;
+
+const Pagination = styled.div`
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    margin: 0 auto;
+    left: 250px;
+    right: 0;
+    justify-content: center;
+    button {
+        margin-right: 1rem;
+        border: none;
+        background-color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        &:hover {
+            opacity: 0.8;
+        }
     }
 `;
