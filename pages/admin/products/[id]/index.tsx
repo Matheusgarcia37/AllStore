@@ -28,6 +28,7 @@ export default function Index(){
         name: '',
         description: '',
         price: '',
+        featured: false,
     });
 
     const { user } = useContext(AuthContext);
@@ -40,6 +41,7 @@ export default function Index(){
                     name: data.name,
                     description: data.description,
                     price: data.price,
+                    featured: data.featured,
                 });
                 setTagsSelecionadas(data.Tag.map(tag => ({
                     value: tag.id,
@@ -70,7 +72,7 @@ export default function Index(){
             showCancelButton: true,
             inputValidator: (value) => {
               if (!value) {
-                return 'You need to write something!'
+                return 'Você precisa escrever algo!'
               }
             },
           }) 
@@ -107,6 +109,7 @@ export default function Index(){
                 name: produto.name,
                 description: produto.description,
                 price: produto.price,
+                featured: produto.featured,
                 tags: tagsSelecionadas.map(tag => tag.value)
             }
             // const formData = new FormData();
@@ -134,6 +137,10 @@ export default function Index(){
            </HeaderPage>
             <Content>
                 <Formulario>
+                    <Destaque>
+                        <span>Destaque</span>
+                        <input type="checkbox" checked={produto.featured} onChange={(e) => { setProduto({...produto, featured: e.target.checked}) }} />
+                   </Destaque>
                     <label>
                         <span>Nome do Produto</span>
                         <input type="text" value={produto.name} name='name' onChange={handleChangeProduto} />
@@ -272,4 +279,25 @@ const ButtonAlterar = styled.button`
     text-transform: uppercase;
     width: 20%;
     align-self: flex-end;
+`;
+
+const Destaque = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    span {
+        padding: 0.5rem;
+        font-size: .75rem;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+    }
+    input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: .75rem;
+        color: black;
+        text-transform: uppercase;
+    }
 `;

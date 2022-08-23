@@ -17,6 +17,7 @@ export default function Index(){
         name: '',
         description: '',
         price: '',
+        featured: false,
     });
 
     const { user } = useContext(AuthContext);
@@ -77,6 +78,7 @@ export default function Index(){
             const dados = {
                 name: produto.name,
                 description: produto.description,
+                featured: produto.featured,
                 price: produto.price,
                 storeId: user.Store.id,
                 tags: tagsSelecionadas.map(tag => tag.value)
@@ -99,6 +101,7 @@ export default function Index(){
                     name: '',
                     description: '',
                     price: '',
+                    featured: false,
                 });
                 setTagsSelecionadas([]);
             }
@@ -112,6 +115,11 @@ export default function Index(){
            </HeaderPage>
             <Content>
                 <Formulario>
+                    <Destaque>
+                        <span>Destaque</span>
+                        <input type="checkbox" checked={produto.featured} onChange={(e) => { setProduto({...produto, featured: e.target.checked}) }} />
+                   </Destaque>
+                    
                     <label>
                         <span>Nome do Produto</span>
                         <input type="text" value={produto.name} name='name' onChange={handleChangeProduto} />
@@ -250,4 +258,25 @@ const ButtonCadastrar = styled.button`
     text-transform: uppercase;
     width: 20%;
     align-self: flex-end;
+`;
+
+const Destaque = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    span {
+        padding: 0.5rem;
+        font-size: .75rem;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+    }
+    input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: .75rem;
+        color: black;
+        text-transform: uppercase;
+    }
 `;

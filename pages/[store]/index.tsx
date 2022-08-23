@@ -6,57 +6,20 @@ import { ContainerIndex, FeaturedProducts } from './IndexElements';
 
 export default function Index() {
   const store = useContext(StoreContext);
-  const produtosFake = [
-    {
-      id: 1,
-      name: 'Produto 1',
-      price: 'R$ 10,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 2,
-      name: 'Produto 2',
-      price: 'R$ 20,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 3,
-      name: 'Produto 3',
-      price: 'R$ 30,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 4,
-      name: 'Produto 4',
-      price: 'R$ 40,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 5,
-      name: 'Produto 5',
-      price: 'R$ 50,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 6,
-      name: 'Produto 6',
-      price: 'R$ 60,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-    {
-      id: 7,
-      name: 'Produto 7',
-      price: 'R$ 70,00',
-      image: 'https://picsum.photos/200/300',
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.',
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    if(store) {
+      const getFeaturedProducts = async () => {
+        const { data } = await api.put('/products/featured', {
+          storeId: store.id,
+        })
+        console.log(data)
+        setProducts(data);
+      }
+      getFeaturedProducts();
+    }
+  }, [store]);
+
   return (
     store ? (
       <ContainerIndex>
@@ -65,9 +28,9 @@ export default function Index() {
         <FeaturedProducts>
           <h2>Produtos em destaque</h2>
           <ul>
-            {produtosFake.map((produto) => (
+            {products.map((produto) => (
               <li key={produto.id}>
-                <img src={produto.image} alt={produto.name} />
+                <img src={"https://picsum.photos/200/300"} alt={produto.name} />
                 <strong>{produto.name}</strong>
                 <span>{produto.price}</span>
               </li>
