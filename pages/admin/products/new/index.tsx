@@ -23,16 +23,18 @@ export default function Index(){
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        const getTags = async () => {
-            const response = await api.get('/tags');
-            console.log(response.data);
-            setTagsDisponiveis(response.data.map(tag => ({
-                value: tag.id,
-                label: tag.name,
-            })));
+        if (user) {
+            const getTags = async () => {
+                const response = await api.get('/tags/' + user.Store.id);
+                console.log(response.data);
+                setTagsDisponiveis(response.data.map(tag => ({
+                    value: tag.id,
+                    label: tag.name,
+                })));
+            }
+            getTags();
         }
-        getTags();
-    }, []);
+    }, [user]);
     
     const createTags = async () => {
         const { value: nameTag } = await Swal.fire({
@@ -52,7 +54,7 @@ export default function Index(){
                 storeId: user.Store.id
             });
             
-            const response = await api.get('/tags');
+            const response = await api.get('/tags/' + user.Store.id);
             setTagsDisponiveis(response.data.map(tag => ({
                 value: tag.id,
                 label: tag.name,

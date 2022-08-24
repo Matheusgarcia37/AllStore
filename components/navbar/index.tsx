@@ -70,7 +70,7 @@ function Navbar() {
               <Link href={`/${NameStore}`}>
                 <NavbarLink >Home</NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}`}>
+              <Link  href={`/${NameStore}/products`}>
                 <NavbarLink >Produtos</NavbarLink>
               </Link>
               <Link  href={`/${NameStore}`}>
@@ -99,7 +99,7 @@ function Navbar() {
             <Link href={`/${NameStore}`} >
               <NavbarLinkExtended > <AiOutlineHome></AiOutlineHome>Home</NavbarLinkExtended>
             </Link>
-            <Link href={`/${NameStore}`}>
+            <Link href={`/${NameStore}/products`}>
               <NavbarLinkExtended ><BsBag></BsBag>Produtos</NavbarLinkExtended>
             </Link>
             <Link  href={`/${NameStore}`}>

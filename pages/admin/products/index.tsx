@@ -8,7 +8,7 @@ export default function Products() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(AuthContext);
     const [skip, setSkip] = useState(0);
-    const [limit, setLimit] = useState(3);
+    const [limit, setLimit] = useState(10);
     const [totalProducts, setTotalProducts] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     useEffect(() => {
