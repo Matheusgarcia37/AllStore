@@ -20,9 +20,12 @@ import {
   NavBarHeaderContact,
   NavBarHeaderContactRight,
   NavBarHeaderContactLeft,
+  MiddleContainer,
+  SearchProducts,
+  NavbarFooterExtendedContent,
 } from "./NavbarElements";
 import { AiOutlineFacebook, AiOutlineHome, AiOutlineInstagram, AiOutlineMail, AiOutlinePhone, AiOutlineTwitter } from 'react-icons/ai'
-import { BsBag, BsBook } from 'react-icons/bs'
+import { BsBag, BsBook, BsSearch } from 'react-icons/bs'
 import { IoMdContact } from 'react-icons/io'
 import Link from 'next/link'
 import LogoImg from "../../images/logo.svg";
@@ -37,6 +40,23 @@ function Navbar() {
   const NameStore = router.query.store;
   const store = React.useContext(StoreContext);
 
+  const [search, setSearch] = useState('');
+
+  const handleChangeSearch = (e) => {
+    setSearch(e.target.value);
+  }
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if(search && search !== "") {
+      const inputSearch = search;
+      //setSearch('');
+      router.push(`/${NameStore}/products?search=${inputSearch}`);
+    } else {
+      //setSearch('');
+      router.push(`/${NameStore}/products`);
+    }
+  }
 
   return (
     <NavbarContainer data-extendnavbar={extendNavbar}>
@@ -68,16 +88,16 @@ function Navbar() {
           <LeftContainer>
             <NavbarLinkContainer>
               <Link href={`/${NameStore}`}>
-                <NavbarLink >Home</NavbarLink>
+                <NavbarLink > <AiOutlineHome></AiOutlineHome> Home</NavbarLink>
               </Link>
               <Link  href={`/${NameStore}/products`}>
-                <NavbarLink >Produtos</NavbarLink>
+                <NavbarLink ><BsBag></BsBag> Produtos</NavbarLink>
               </Link>
               <Link  href={`/${NameStore}`}>
-                <NavbarLink >Contato</NavbarLink>
+                <NavbarLink ><IoMdContact></IoMdContact> Contato</NavbarLink>
               </Link>
               <Link  href={`/${NameStore}`}>
-                <NavbarLink >Sobre</NavbarLink>
+                <NavbarLink ><BsBook></BsBook> Sobre</NavbarLink>
               </Link>
               <OpenLinksButton
                 onClick={() => {
@@ -88,10 +108,22 @@ function Navbar() {
               </OpenLinksButton>
             </NavbarLinkContainer>
           </LeftContainer>
+          <MiddleContainer>
+            <SearchProducts onSubmit={handleSearch}>
+              <input type="text" placeholder="Pesquisar" onChange={handleChangeSearch} value={search}/>
+              <button type="submit"><BsSearch></BsSearch></button>
+            </SearchProducts>
+          </MiddleContainer>
           <RightContainer>
             <Image src={LogoImg} width={50} />
           </RightContainer>
         </NavbarContainerContent> 
+        <NavbarFooterExtendedContent>
+            <SearchProducts>
+              <input type="text" placeholder="Pesquisar" onChange={handleChangeSearch} value={search}/>
+              <button onClick={handleSearch}><BsSearch></BsSearch></button>
+            </SearchProducts>
+        </NavbarFooterExtendedContent>
       </NavbarInnerContainer>
       <NavbarExtendedContainer data-extendnavbar={extendNavbar}>
         <NavbarExtendedLinkContainer data-extendnavbar={extendNavbar}>

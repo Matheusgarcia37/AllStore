@@ -69,16 +69,20 @@ export const NavbarContainerContent = styled.div`
 `;
 
 export const LeftContainer = styled.div`
-  flex: 70%;
+  flex: 22%;
   display: flex;
   align-items: center;
+  
+  @media (max-width: 700px) {
+    flex: 0%;
+  }
 `;
 
 export const RightContainer = styled.div`
-  flex: 30%;
+  flex: 10%;
   display: flex;
   justify-content: flex-end;
-  padding-right: 50px;
+  padding-right: 20px;
 `;
 
 export const NavbarInnerContainer = styled.div`
@@ -94,11 +98,16 @@ export const NavbarLinkContainer = styled.div`
 `;
 
 export const NavbarLink = styled.a`
+  display: flex;
+  align-items: center;
   color: ${({theme}) => theme.colors.secondary};
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-family: 'Roboto', sans-serif;
   text-decoration: none;
   margin: 10px;
+  svg {
+    margin-right: 6px;
+  }
   @media (max-width: 700px) {
     display: none;
   }
@@ -210,5 +219,60 @@ export const NavbarExtendedContainer = styled.div`
   transition: left 0.5s;
   @media (min-width: 700px) {
     display: none;
+  }
+`;
+
+export const MiddleContainer = styled.div`
+  display: flex;
+  flex: 90%;
+  align-items: center;
+  
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;
+
+export const NavbarFooterExtendedContent = styled.div`
+  display: none;
+  width: 100%;
+  background-color: ${({theme}) => theme.colors.primary};
+  padding: 5px 0;
+  border-top: 1px solid ${({theme}) => theme.colors.secondary};
+  @media (max-width: 700px) {
+    display: flex;
+  }
+`;
+
+export const SearchProducts = styled.form`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  margin: 0 10px;
+  input {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 1.2rem;  
+    padding-right: 42px;
+    :focus {
+      
+    }
+  }
+  button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 40px;
+    width: 40px;
+    border: none;
+    background-color: ${({theme}) => theme.colors.secondary};
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    svg {
+      color: ${({theme}) => theme.colors.primary};
+    }
   }
 `;

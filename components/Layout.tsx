@@ -14,6 +14,11 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+    height: 100vh;
+
+    ::-webkit-scrollbar {
+      display: none;
+    } 
   }
 `
 

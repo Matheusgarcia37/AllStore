@@ -1,48 +1,135 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-export default function Index () {
-    const [products, setProducts] = useState([]);
+import api from '../../../api/api';
+import { StoreContext } from '../../../components/Layout';
+import Select from 'react-select'
 
+export default function Index () {
+    const router = useRouter();
+    const { search } = router.query;
+
+    const [products, setProducts] = useState([]);
+    const [tagSelected, setTagSelected] = useState(null);
+    const [totalProducts, setTotalProducts] = useState(0);
     const [skip, setSkip] = useState(0);
     const limit = 10;
+    
+    const store = useContext(StoreContext);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const [tagsToFilter, setTagsToFilter] = useState([]);
+
+    useEffect(() => {
+        if (store) {
+            const getProducts = async () => {
+                const response = await api.put('/products', {
+                    storeId: store.id,
+                    skip: skip,
+                    limit: limit,
+                    tagSelected: tagSelected,
+                    search: search ? search : ''
+                });
+                console.log(response)
+                setTotalProducts(response.data[0]);
+                setTotalPages(Math.ceil(response.data[0] / limit));
+                setProducts(response.data[1]);
+            }
+            getProducts();
+
+            const getTagsStore = async () => {
+                const { data } =  await api.get('/tags/' + store.id);
+                console.log(data)
+                const dataDefault = { value: null, label: 'Todas' };
+                const newData = data.map((tag) => {
+                    return {
+                        ...tag,
+                        value: tag.id,
+                        label: tag.name
+                    }
+                })
+
+                setTagsToFilter([dataDefault, ...newData]);
+            }
+            getTagsStore();
+        }
+    }, [store, search]);
+
+    useEffect(() => {
+        if (store) {
+            const getProducts = async () => {
+                const response = await api.put('/products', {
+                    storeId: store.id,
+                    skip: skip,
+                    limit: limit,
+                    tagSelected: tagSelected,
+                    search: search ? search : ''
+                });
+                setTotalProducts(response.data[0]);
+                setTotalPages(Math.ceil(response.data[0] / limit));
+                setProducts(response.data[1]);
+            }
+            getProducts();
+        }
+    }, [skip, limit, tagSelected]);
+
 
     return (
         <Container>
-            <RightSpace>
+            <LeftSpace>
                 <Categorias>
                     <h1>Categorias</h1>
                     <ul>
-                        <li>
-                            <a href="#">Categoria 1</a>
+                        <li onClick={() => {setTagSelected(null)}}>
+                            <span>Todas</span>
                         </li>
-                        <li>
-                            <a href="#">Categoria 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Categoria 3</a>
-                        </li>
-                        <li>
-                            <a href="#">Categoria 4</a>
-                        </li>
+                        {tagsToFilter.map(tag => (
+                            <li key={tag.id} onClick={() => {
+                                setTagSelected(tag);
+                            }}>
+                                 <span>{tag.name}</span>
+                            </li>
+                        ))}
                     </ul>
                 </Categorias>
-            </RightSpace>
-            <LeftSpace>
+            </LeftSpace>
+            <RightSpace>
                 <HeaderPage>
                     <h1>Resultados</h1>
                 </HeaderPage>
+                <CategoriaExtended>
+                    <Select name='Categorias' placeholder='Categorias' options={tagsToFilter} value={tagSelected} onChange={(tag) => {setTagSelected(tag)}}/>
+                </CategoriaExtended>
                 <Products>
                     <ul>
                         {products.map((produto) => (
                         <li key={produto.id}>
                             <img src={"https://picsum.photos/200/300"} alt={produto.name} />
-                            <strong>{produto.name}</strong>
-                            <span>{produto.price}</span>
+                            <Description>
+                                <strong>{produto.name}</strong>
+                                <span>{produto.price}</span>
+                            </Description>
                         </li>
                         ))}
                     </ul>
                 </Products>
-            </LeftSpace>
+                  {/* Pagination */}
+                {totalPages > 1 && (
+                    <Pagination>
+                        <ButtonPagination onClick={() => { setSkip(skip - limit) }} disabled={skip === 0}>Anterior</ButtonPagination>
+                        {Array.from(Array(totalPages).keys()).map((page) => (
+                            <>
+                            {skip / limit !== page ? (
+                                <ButtonPagination key={page} onClick={() => { setSkip(page * limit) }}>{page + 1}</ButtonPagination>
+                            ) : (
+                                <CurrentButtonPagination key={page} onClick={() => { setSkip(page * limit) }}>{page + 1}</CurrentButtonPagination>
+                            )}
+                            </>
+                        ))}
+                        <ButtonPagination onClick={() => {setSkip(skip + limit) }} disabled={(skip + limit) >= totalProducts}>Próximo</ButtonPagination>
+                    </Pagination>
+                )}
+            </RightSpace>
         </Container>
     );
 }
@@ -54,46 +141,55 @@ const Container = styled.div`
     align-items: flex-start;
     width: 100%;
     height: 100%;
-    position: relative;
     width: 100%;
     margin-bottom: 2rem;
-`;
 
-const RightSpace = styled.div`
-    width: 20%;
-    height: 100%;
-    position: relative;
-    margin-right: 1rem;
+    @media (max-width: 768px) {
+        align-items: center;
+        justify-content: center;
+    }
 `;
 
 const LeftSpace = styled.div`
-    width: 80%;
+    width: 15%;
+    height: 100%;
+    margin-right: 1rem;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
+`;
+
+const RightSpace = styled.div`
+    width: 85%;
     height: 100%;
     position: relative;
-    margin-left: 1rem;
+    padding-bottom: 4rem;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const Categorias = styled.div`
     width: 100%;
     height: 100%;
-    position: relative;
     h1 {
-
+        margin-top: 2rem;
+        font-size: 1.2rem;
     }
     ul {
         list-style: none;
         li {
-            a {
+            span {
+                cursor: pointer;
                 display: block;
-                padding: 1rem;
-                font-size: 1rem;
-                font-weight: bold;
+                padding: .5rem 0;
+                font-size: 1rem; 
                 color: black;
-                text-transform: uppercase;
                 text-decoration: none;
-                border-bottom: 1px solid #ccc;
                 &:hover {
-                    background-color: #ccc;
+                    opacity: 0.7;
                 }
             }
         }
@@ -105,19 +201,20 @@ const HeaderPage = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 5rem;
-    position: relative;
-    width: 100%;
-    margin-bottom: 2rem;
-    //shadow
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    h1 {
 
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.3rem;
+        }
     }
 `;
 
-export const Products = styled.div`
-    width: 100%;
+const Products = styled.div`
+    width: 95%;
     display: flex;
     flex-direction: column;
     h2 {
@@ -131,18 +228,19 @@ export const Products = styled.div`
         padding-left: 0;
         display: grid;
         justify-items: center;
-        gap: 1rem;
+        gap: 5rem;
         grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
         li {
+            border-radius: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1rem;
+            //padding: 1rem;
             cursor: pointer;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             img {
-                width: 150px;
-                height: 150px;
+                width: 200px;
+                height: 250px;
                 object-fit: cover;
             }
             strong {
@@ -153,6 +251,98 @@ export const Products = styled.div`
                 font-size: 1rem;
                 margin-top: 5px;
             }
+
+            :hover {
+                //sombra mais forte
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+            }
         }
+    }
+
+    @media (max-width: 768px) {
+        width: 100%;
+        ul {
+           // grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+            gap: 2rem 1rem;
+
+            li {
+                img {
+                    width: 150px;
+                    height: 200px;
+                }
+
+                strong {
+                    font-size: 1rem;
+                }
+                p {
+                    font-size: 0.8rem;
+
+                }
+
+
+            }
+
+
+        }
+    }
+`;
+
+const Description = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5rem;
+    border-top: 1px solid #eee;
+`;
+
+const Pagination = styled.div`
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    margin: 0 auto;
+    left: 0px;
+    right: 0;
+    justify-content: center;
+`;
+
+const ButtonPagination = styled.button`
+    cursor: pointer;
+    margin-right: 1rem;
+    border: none;
+    background-color: ${({ theme }) => { return theme.colors.secondary}};
+    color: white;
+    font-size: .9rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 5px 16px 1px #000000; 
+    box-shadow: 0px 5px 16px 1px #000000;
+    opacity: 1;
+    &:hover {
+        opacity: 0.8;
+    }
+`;
+
+const CurrentButtonPagination = styled.button`
+    cursor: pointer;
+    margin-right: 1rem;
+    border: none;
+    background-color: ${({ theme }) => { return theme.colors.primary }};
+    color: white;
+    font-size: .9rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    &:hover {
+        opacity: 0.8;
+    }
+`;
+
+const CategoriaExtended = styled.div`
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
     }
 `;
