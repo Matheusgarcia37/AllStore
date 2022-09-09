@@ -58,6 +58,10 @@ function Navbar() {
     }
   }
 
+  const closeMenuExtended = () => {
+    setExtendNavbar((curr) => !curr);
+  }
+
   return (
     <NavbarContainer data-extendnavbar={extendNavbar}>
       <NavbarInnerContainer>
@@ -129,16 +133,16 @@ function Navbar() {
         <NavbarExtendedLinkContainer data-extendnavbar={extendNavbar}>
           <NavbarExtendedLinksContainer>
             <Link href={`/${NameStore}`} >
-              <NavbarLinkExtended > <AiOutlineHome></AiOutlineHome>Home</NavbarLinkExtended>
+              <NavbarLinkExtended  onClick={closeMenuExtended}> <AiOutlineHome></AiOutlineHome>Home</NavbarLinkExtended>
             </Link>
             <Link href={`/${NameStore}/products`}>
-              <NavbarLinkExtended ><BsBag></BsBag>Produtos</NavbarLinkExtended>
+              <NavbarLinkExtended onClick={closeMenuExtended}><BsBag></BsBag>Produtos</NavbarLinkExtended>
             </Link>
             <Link  href={`/${NameStore}`}>
-              <NavbarLinkExtended ><IoMdContact></IoMdContact>Contato</NavbarLinkExtended>
+              <NavbarLinkExtended onClick={closeMenuExtended}><IoMdContact></IoMdContact>Contato</NavbarLinkExtended>
             </Link>
             <Link  href={`/${NameStore}`}>
-              <NavbarLinkExtended ><BsBook></BsBook>Sobre</NavbarLinkExtended>
+              <NavbarLinkExtended onClick={closeMenuExtended}><BsBook></BsBook>Sobre</NavbarLinkExtended>
             </Link>
           </NavbarExtendedLinksContainer>
           <RedesSociaisBarExtended>
@@ -161,12 +165,8 @@ function Navbar() {
         </NavbarExtendedLinkContainer>
       </NavbarExtendedContainer>
       {extendNavbar && (
-        <NavBarExtendedFadeContainer data-extendnavbar={extendNavbar}>
-          <NavbarLinkCloseExtended onClick={() => {
-            setExtendNavbar((curr) => !curr);
-          }
-          }>
-            {/* simbolo X */}
+        <NavBarExtendedFadeContainer data-extendnavbar={extendNavbar} onClick={closeMenuExtended}>
+          <NavbarLinkCloseExtended >
             &#10006;
           </NavbarLinkCloseExtended>
         </NavBarExtendedFadeContainer>)}

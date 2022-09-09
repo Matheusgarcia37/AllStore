@@ -192,7 +192,7 @@ export const RedesSociaisBarExtended = styled.div`
 `;
 
 export const NavBarExtendedFadeContainer = styled.div`
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
   height: 100%;
   width: 100%;
@@ -202,13 +202,19 @@ export const NavBarExtendedFadeContainer = styled.div`
 
 export const NavbarLinkCloseExtended = styled.a`
   color: ${({theme}) => theme.colors.secondary};
-  font-size: 1.4rem;
+  font-size: 2rem;
   position: absolute;
   top: 20px;
   right: 20px;
   opacity: 1;
-  z-index: 3;
+  z-index: 5;
   cursor: pointer;
+
+  //text shadow
+  -webkit-text-stroke: 1px ${({theme}) => theme.colors.secondary};
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+
 `;
 
 export const NavbarExtendedContainer = styled.div`
