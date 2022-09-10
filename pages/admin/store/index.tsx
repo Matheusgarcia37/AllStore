@@ -85,6 +85,8 @@ export default function Index(){
         secondaryColor: '',
     })
 
+    const [file, setFile] = useState(null);
+
     const handleStore = (e) => {
         setStore({ ...store, [e.target.name]: e.target.value });
     }
@@ -167,17 +169,28 @@ export default function Index(){
 
     const handleAlterar = async (e) => {
         e.preventDefault();
-        const data = {
-            name: store.nameStore,
-            typeOfStore: store.typeOfStore,
-            about: store.about,
-            primaryColor: state1.color.r + ',' + state1.color.g + ',' + state1.color.b,
-            secondaryColor: state2.color.r + ',' + state2.color.g + ',' + state2.color.b,
-            Contact: contacts,
-            Address: addresses,
-        }
+        //formdata com dados e logo
+        const formData = new FormData();
+        formData.append('name', store.nameStore);
+        formData.append('typeOfStore', store.typeOfStore);
+        formData.append('about', store.about);
+        formData.append('primaryColor', state1.color.r + ',' + state1.color.g + ',' + state1.color.b);
+        formData.append('secondaryColor', state2.color.r + ',' + state2.color.g + ',' + state2.color.b);
+        formData.append('Contact', JSON.stringify(contacts));
+        formData.append('Address', JSON.stringify(addresses));
+        formData.append('file', file);
+        
+        // const data = {
+        //     name: store.nameStore,
+        //     typeOfStore: store.typeOfStore,
+        //     about: store.about,
+        //     primaryColor: state1.color.r + ',' + state1.color.g + ',' + state1.color.b,
+        //     secondaryColor: state2.color.r + ',' + state2.color.g + ',' + state2.color.b,
+        //     Contact: contacts,
+        //     Address: addresses,
+        // }
         try {
-            const { data: dataResponse } = await api.put('/store/' + user.Store.id, data);
+            const { data: dataResponse } = await api.put('/store/' + user.Store.id, formData);
             console.log(dataResponse);
         } catch (error) {
             console.log(error);
@@ -208,6 +221,12 @@ export default function Index(){
                         <span>Sobre</span>
                         <textarea name='about' value={ store.about }  onChange={handleStore}></textarea>
                     </label>
+                    {/* Content Image Logo */}
+                    <label>
+                        <span>Logo</span>
+                        <input type="file" onChange={(e) => {setFile(e.target.files[0]) }} />
+                    </label>
+
                     {/* Colors */}
                     <ContentColorsPicker>
                         <div>
