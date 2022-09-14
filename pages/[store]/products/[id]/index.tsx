@@ -1,0 +1,275 @@
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import api from "../../../../api/api";
+import styled from "styled-components";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+
+export default function ProductPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [product, setProduct] = useState(null);
+  const [currentImage, setCurrentImage] = useState(0);
+  useEffect(() => {
+    if (id) {
+      const getProduct = async () => {
+        const { data: product } = await api.get("/products/" + id);
+        setProduct(product);
+      };
+      getProduct();
+    }
+  }, [id]);
+
+  return (
+    <div>
+      {product && (
+        <Content>
+          {product.Upload.length > 0 && (
+            <Illustration>
+              <DestaqueImage>
+                <Image
+                  height={400}
+                  width={400}
+                  layout="intrinsic"
+                  src={product.Upload[currentImage]?.url}
+                  alt="imagem do produto"
+                />
+              </DestaqueImage>
+              {/* div para escolher outras imagens */}
+              <>
+                <ButtonChangeImage>
+                  <button
+                    onClick={() => {
+                      setCurrentImage(
+                        currentImage - 1 >= 0
+                          ? currentImage - 1
+                          : product.Upload.length - 1
+                      );
+                    }}
+                  >
+                    <IconeChangeImage>
+                      {" "}
+                      <MdArrowBack size={30} color="#000" />
+                    </IconeChangeImage>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCurrentImage(
+                        currentImage + 1 === product.Upload.length
+                          ? 0
+                          : currentImage + 1
+                      );
+                    }}
+                  >
+                    <IconeChangeImage>
+                      <MdArrowForward size={30} color="#000" />
+                    </IconeChangeImage>
+                  </button>
+                </ButtonChangeImage>
+                <OtherImages>
+                  {product.Upload.map((image, index) => (
+                    <OtherImage>
+                      <Image
+                        height={150}
+                        width={150}
+                        src={image.url}
+                        alt="imagem do produto"
+                        onClick={() => {
+                          setCurrentImage(index);
+                        }}
+                      />
+                    </OtherImage>
+                  ))}
+                </OtherImages>
+              </>
+            </Illustration>
+          )}
+          <Description>
+            <h2>{product.name}</h2>
+            <p>Descrição: {product.description}</p>
+            <ConsultPrice
+              onClick={(e) => {
+                e.preventDefault();
+                //consultarPreco(produto);
+              }}
+            >
+              Colsultar preço
+            </ConsultPrice>
+          </Description>
+        </Content>
+      )}
+    </div>
+  );
+}
+
+/* styled components */
+const Content = styled.div`
+  display: flex;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+const Illustration = styled.div`
+  flex: 2;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
+`;
+const DestaqueImage = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: 300px;
+    max-width: 300px;
+    margin: 0 auto;
+
+    img {
+      height: 300px;
+      max-width: 300px;
+    }
+  }
+`;
+const OtherImages = styled.div`
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  img {
+    width: 150px;
+    height: 150px;
+    margin-right: 1rem;
+    margin-bottom: 0.2rem;
+    :last-child {
+      margin-right: 0;
+    }
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .activeImage {
+    border: 3px solid var(--secondary-color);
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .otherImage {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 0;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 0;
+    }
+  }
+`;
+const ButtonChangeImage = styled.div`
+  z-index: 5;
+  position: absolute;
+  right: 50px;
+  :first-child {
+    margin-right: 0.6rem;
+  }
+  button {
+    background-color: white;
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+    .iconeChangeImage {
+    }
+  }
+
+  @media (max-width: 768px) {
+    right: 0;
+  }
+`;
+const Description = styled.div`
+  flex: 1;
+  margin-top: 2rem;
+  padding: 0 1rem;
+  h2 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .consultPrice {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    &:hover {
+      background-color: var(--secondary-color);
+      color: var(--primary-color);
+    }
+  }
+`;
+
+const ConsultPrice = styled.button`
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  &:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+  }
+`;
+const Loader = styled.div`
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const IconeChangeImage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0.3rem;
+  svg {
+    margin: 0;
+  }
+`;
+const OtherImage = styled.div`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 0;
+
+  img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0;
+  }
+`;

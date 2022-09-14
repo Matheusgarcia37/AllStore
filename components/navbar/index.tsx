@@ -28,7 +28,7 @@ import { AiOutlineFacebook, AiOutlineHome, AiOutlineInstagram, AiOutlineMail, Ai
 import { BsBag, BsBook, BsSearch } from 'react-icons/bs'
 import { IoMdContact } from 'react-icons/io'
 import Link from 'next/link'
-import LogoImg from "../../images/logo.svg";
+//import LogoImg from "../../images/logo.svg";
 import api from "../../api/api";
 import { useRouter } from "next/router";
 import { StoreContext } from "../../components/Layout";
@@ -119,7 +119,7 @@ function Navbar() {
             </SearchProducts>
           </MiddleContainer>
           <RightContainer>
-            <Image src={LogoImg} width={50} />
+            <Image src={store?.Upload?.url} width={100} height={100}/>
           </RightContainer>
         </NavbarContainerContent> 
         <NavbarFooterExtendedContent>

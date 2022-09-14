@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react'
 import Select from 'react-select'
 import api from '../../../../api/api';
@@ -16,6 +16,10 @@ type ProdutoType = {
 }
 
 export default function Index(){
+    const ImagensInput = useRef(null);
+
+    const [ImagensFiles, setImagensFiles] = useState({ length: 0 });
+
     const router = useRouter();
     const { id: produtoId } = router.query;
     console.log(produtoId)
@@ -37,6 +41,7 @@ export default function Index(){
         const getProduct = async () => {
             if(produtoId){
                 const { data } = await api.get(`/products/${produtoId}`);
+                console.log(data)
                 setProduto({
                     name: data.name,
                     description: data.description,
@@ -47,9 +52,18 @@ export default function Index(){
                     value: tag.id,
                     label: tag.name,
                 })));
+                const imagesUploaded = { 
+                    length: data.Upload.length,
+                }
+                data?.Upload?.forEach((image, key) => {
+                    imagesUploaded[key] = image.url;
+                })
+                setImagensFiles(imagesUploaded);
+               console.log("imagens", data.Upload)
             }
         }
         getProduct();
+        console.log("imagensFiles",ImagensFiles);
     } , [produtoId]);
 
     useEffect(() => {
@@ -112,13 +126,16 @@ export default function Index(){
                 featured: produto.featured,
                 tags: tagsSelecionadas.map(tag => tag.value)
             }
-            // const formData = new FormData();
-            // formData.append('name', produto.name);
-            // formData.append('description', produto.description);
-            // formData.append('price', produto.price);
-            // formData.append('storeId', user.Store.id);
-            // formData.append('tags', JSON.stringify(tagsSelecionadas.map(tag => tag.value)));
-            const response = await api.put('/products/' + produtoId , dados);
+
+
+           
+            const formData = new FormData();
+            for (let i = 0; i < ImagensFiles.length; i++) {
+                formData.append('file', ImagensFiles[i]);
+            }
+            formData.append('data', JSON.stringify(dados));
+
+            const response = await api.put('/products/' + produtoId , formData);
             if(response.status === 200){
                 Swal.fire({
                     title: 'Produto alterado com sucesso',
@@ -172,6 +189,37 @@ export default function Index(){
                             <button type="button" onClick={createTags}>Adicionar nova categoria</button>
                         </SelectContainer>
                     </Categorias>
+
+                                        {/* Imagens do produto */}
+                                        <Imagens>
+                        <label>Imagens</label>
+                        <input type="file" ref={ImagensInput} multiple style={{display: 'none'}} onChange={(e) => { 
+                            setImagensFiles(e.target.files as any);
+                            console.log(e.target.files);
+                        }} />
+                        <button type="button" onClick={() => {ImagensInput.current.click()}}>Adicionar imagens</button>
+                    </Imagens>
+                    {/* Se tiver imagens mostra-las */}
+                    {ImagensFiles.length > 0 && (
+                        <ImagensSelecionadas>
+                            {Array.from(ImagensFiles).map((file: any, key) => (
+                                <div key={key}>
+                                    {console.log('matheus',file)}
+                                    {   file instanceof File ? (
+                                        <>
+                                            <img src={URL.createObjectURL(file) ? URL.createObjectURL(file) : null} alt={file.name} />
+                                            <span>{file?.name}</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img src={file} alt={'Image ' + key + 1} />
+                                                <span>{'Image ' + key + 1}</span>
+                                            </>
+                                        )}
+                                </div>
+                            ))}
+                        </ImagensSelecionadas>
+                    )}
                   
                     <ButtonAlterar type="button" onClick={handleAlterar}>Alterar</ButtonAlterar>
                 </Formulario>
@@ -299,5 +347,54 @@ const Destaque = styled.div`
         font-size: .75rem;
         color: black;
         text-transform: uppercase;
+    }
+`;
+
+
+const Imagens = styled.div`
+    margin-top: 1rem;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    label {
+        padding: 0.5rem;
+        font-size: .75rem;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+    }
+    button {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: .75rem;
+        color: black;
+        text-transform: uppercase;
+        width: 15%;
+    }
+`;
+
+const ImagensSelecionadas = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        span {
+            padding: 0.5rem;
+            font-size: .75rem;
+            font-weight: bold;
+            color: black;
+            text-transform: uppercase;
+        }
     }
 `;

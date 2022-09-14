@@ -5,6 +5,9 @@ import api from '../../../api/api';
 import { StoreContext } from '../../../components/Layout';
 import Select from 'react-select'
 
+import semFoto from '../../../images/sem-foto.webp';
+import Image from 'next/image';
+
 export default function Index () {
     const router = useRouter();
     const { search } = router.query;
@@ -103,8 +106,14 @@ export default function Index () {
                 <Products>
                     <ul>
                         {products.map((produto) => (
-                        <li key={produto.id}>
-                            <img src={"https://picsum.photos/200/300"} alt={produto.name} />
+                        <li key={produto.id} onClick={() => {
+                            router.push('/' + store.name + '/products/' + produto.id);
+                        }}>
+                            {produto.Upload[0] ? (<>
+                                <Image src={produto.Upload[0].url} alt={produto.name} width={200} height={200} />
+                            </>) : (
+                                <Image src={semFoto} alt='Sem foto' width={200} height={200}/>
+                            )}
                             <Description>
                                 <strong>{produto.name}</strong>
                                 <span>{produto.price}</span>

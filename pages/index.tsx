@@ -1,12 +1,13 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import React from 'react';
 import { SketchPicker, ChromePicker } from 'react-color';
 import styled from 'styled-components'
 import api from '../api/api';
 import { AuthContext } from '../contexts/AuthContext';
+import { FaUpload } from 'react-icons/fa';
 //Pagina de login/cadastro
 export default function Home() {
-
+  const inputFile = useRef(null);
   const { signIn } = useContext(AuthContext);
 
   const [login, setLogin] = useState(true);
@@ -33,6 +34,8 @@ export default function Home() {
     primaryColor: '',
     secondaryColor: '',
   });
+
+  const [file, setFile] = useState(null);
 
   const [loginState, setLoginState] = useState({
     username: '',
@@ -79,8 +82,13 @@ export default function Home() {
       //coloco colors dentro do registroState
       registroState.primaryColor = state1.color.r + ',' + state1.color.g + ',' + state1.color.b;
       registroState.secondaryColor = state2.color.r + ',' + state2.color.g + ',' + state2.color.b;
-      console.log(registroState);
-      const response = await api.post('/store/', registroState);
+      //criar formData 
+      const formData = new FormData();
+      //adicionar file dentro do formData
+      formData.append('file', file);
+      //adicionar registroState dentro do formData
+      formData.append('data', JSON.stringify(registroState));
+      const response = await api.post('/store/', formData);
       if(response.status === 200){
         alert('Cadastro realizado com sucesso!');
       }
@@ -133,9 +141,19 @@ export default function Home() {
             <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />
             {/* sobre */}
             <textarea placeholder="Sobre" value={registroState.about} name="about" onChange={onChangeRegistro} />  
+            
             <input type="text" placeholder="Nome do usuario" value={registroState.nameUser} name="nameUser" onChange={onChangeRegistro} />
             <input type="text" placeholder="Email do usuario" value={registroState.email} name="email" onChange={onChangeRegistro} />
             <input type="password" placeholder="Senha do usuario" value={registroState.password} name="password" onChange={onChangeRegistro} />
+            {/* logo */}
+            <input
+                ref={inputFile}
+                onChange={(e) => {setFile(e.target.files[0])}}
+                type="file"
+                style={{ display: "none" }}
+                // multiple={false}
+                />
+                <FileInput onClick={(e) => {e.preventDefault();inputFile.current.click()}}><span>Escolher logo</span> <FaUpload></FaUpload></FileInput>
             <ContentColorsPicker>
               <div style={{marginBottom: '1rem'}}>
                 <label>Cor primaria</label>
@@ -297,3 +315,24 @@ const Swatch2 = styled.div`
 `
 
 
+const FileInput = styled.div`
+  display: flex;
+  width: 100%;
+  
+  
+  
+  color: #000;
+  padding: .5rem 1rem;
+  margin: 0;
+  cursor: pointer;
+
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1.1rem;
+
+  span { 
+    margin-left: 1rem;
+    margin-right: .3rem;
+  }
+`;
