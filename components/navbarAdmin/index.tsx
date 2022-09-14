@@ -8,14 +8,17 @@ import { StoreContext } from '../Layout';
 import { AiOutlineRight } from 'react-icons/ai';
 import { MdStorefront } from 'react-icons/md';
 import {BsBag} from 'react-icons/bs';
+import Image from 'next/image';
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
-    
+    console.log(user)
     return (
         <ContainerAdmin>
             <MenuBar>
                 <HeaderMenu>
-                    <Logo>LOGO</Logo>
+                    <Logo>{user && (
+                        <Image src={user.Store?.Upload.url} width={70} height={70}></Image>
+                    )}</Logo>
                     <Logout onClick={logout}>
                         <VscSignIn size={20} color="#fff" />
                     </Logout>
@@ -66,8 +69,8 @@ const Logo = styled.div`
     letter-spacing: 1px;
     margin-right: 20px;
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 10px;
+    left: 10px;
 `;
 const Logout = styled.button`
     display: flex;

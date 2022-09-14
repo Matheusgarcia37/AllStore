@@ -97,10 +97,10 @@ function Navbar() {
               <Link  href={`/${NameStore}/products`}>
                 <NavbarLink ><BsBag></BsBag> Produtos</NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}`}>
+              <Link  href={`/${NameStore}/contact`}>
                 <NavbarLink ><IoMdContact></IoMdContact> Contato</NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}`}>
+              <Link  href={`/${NameStore}/about`}>
                 <NavbarLink ><BsBook></BsBook> Sobre</NavbarLink>
               </Link>
               <OpenLinksButton
@@ -138,10 +138,10 @@ function Navbar() {
             <Link href={`/${NameStore}/products`}>
               <NavbarLinkExtended onClick={closeMenuExtended}><BsBag></BsBag>Produtos</NavbarLinkExtended>
             </Link>
-            <Link  href={`/${NameStore}`}>
+            <Link  href={`/${NameStore}/contact`}>
               <NavbarLinkExtended onClick={closeMenuExtended}><IoMdContact></IoMdContact>Contato</NavbarLinkExtended>
             </Link>
-            <Link  href={`/${NameStore}`}>
+            <Link  href={`/${NameStore}/about`}>
               <NavbarLinkExtended onClick={closeMenuExtended}><BsBook></BsBook>Sobre</NavbarLinkExtended>
             </Link>
           </NavbarExtendedLinksContainer>

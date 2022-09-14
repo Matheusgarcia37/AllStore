@@ -68,17 +68,32 @@ export default function ProductPage() {
                 </ButtonChangeImage>
                 <OtherImages>
                   {product.Upload.map((image, index) => (
-                    <OtherImage>
-                      <Image
-                        height={150}
-                        width={150}
-                        src={image.url}
-                        alt="imagem do produto"
-                        onClick={() => {
-                          setCurrentImage(index);
-                        }}
-                      />
-                    </OtherImage>
+
+                    currentImage === index ? (
+                        <OtherImageCurrent>
+                            <Image
+                                height={150}
+                                width={150}
+                                src={image.url}
+                                alt="imagem do produto"
+                                onClick={() => {
+                                    setCurrentImage(index);
+                                }}
+                            />
+                        </OtherImageCurrent>
+                    ) : (
+                        <OtherImage>
+                            <Image
+                            height={150}
+                            width={150}
+                            src={image.url}
+                            alt="imagem do produto"
+                            onClick={() => {
+                                setCurrentImage(index);
+                            }}
+                            />
+                      </OtherImage>
+                    )
                   ))}
                 </OtherImages>
               </>
@@ -104,9 +119,9 @@ export default function ProductPage() {
 
 /* styled components */
 const Content = styled.div`
+  padding: 2rem 0;
   display: flex;
   width: 100%;
-
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -179,7 +194,7 @@ const ButtonChangeImage = styled.div`
   }
   button {
     background-color: white;
-    border: 1px solid var(--primary-color);
+    border: 1px solid ${({ theme }) => theme.colors.primary};
     cursor: pointer;
     .iconeChangeImage {
     }
@@ -197,7 +212,7 @@ const Description = styled.div`
     font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    color: var(--primary-color);
+    color: ${({ theme }) => theme.colors.primary};
   }
   p {
     font-size: 1rem;
@@ -207,7 +222,7 @@ const Description = styled.div`
 
   .consultPrice {
     width: 100%;
-    background-color: var(--primary-color);
+    background-color: ${({ theme }) => theme.colors.primary};
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -217,15 +232,15 @@ const Description = styled.div`
     transition: all 0.3s ease;
     text-transform: uppercase;
     &:hover {
-      background-color: var(--secondary-color);
-      color: var(--primary-color);
+      background-color: ${({ theme }) => theme.colors.secondary};
+      color: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
 
 const ConsultPrice = styled.button`
   width: 100%;
-  background-color: var(--primary-color);
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -235,8 +250,8 @@ const ConsultPrice = styled.button`
   transition: all 0.3s ease;
   text-transform: uppercase;
   &:hover {
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
+    background-color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 const Loader = styled.div`
@@ -261,6 +276,24 @@ const OtherImage = styled.div`
   height: 100px;
   margin-bottom: 0;
 
+  img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0;
+  }
+`;
+
+const OtherImageCurrent = styled.div`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 0;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
   img {
     width: 100px;
     height: 100px;
