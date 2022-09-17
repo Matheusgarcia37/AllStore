@@ -162,6 +162,7 @@ export default function Index(){
                     number: address.number,
                     zip: address.zip,
                 })));
+                setFile(data.Upload?.url)
             }
             getStore();
         }
@@ -226,6 +227,27 @@ export default function Index(){
                         <span>Logo</span>
                         <input type="file" onChange={(e) => {setFile(e.target.files[0]) }} />
                     </label>
+                      {/* Se tiver imagens mostra-las */}
+                      {file && (
+                        <ImagensSelecionadas>
+                            
+                                <div>
+                                    {console.log('matheus',file)}
+                                    {   file instanceof File ? (
+                                        <>
+                                            <img src={URL.createObjectURL(file) ? URL.createObjectURL(file) : null} alt={file.name} />
+                                            <span>{file?.name}</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <img src={file} alt={'Image'} />
+                                                <span>{'Image'}</span>
+                                            </>
+                                        )}
+                                </div>
+                        
+                        </ImagensSelecionadas>
+                    )}
 
                     {/* Colors */}
                     <ContentColorsPicker>
@@ -371,7 +393,6 @@ const Formulario = styled.div`
             border-radius: 5px;
             font-size: .75rem;
             color: black;
-            text-transform: uppercase;
         }
     }
 `;
@@ -404,7 +425,6 @@ const ContainerArrayForm = styled.div`
             border-radius: 5px;
             font-size: .75rem;
             color: black;
-            text-transform: uppercase;
         }
     }
     button {
@@ -465,3 +485,27 @@ const ButtonAlterar = styled.button`
     align-self: flex-end;
 `;
 
+const ImagensSelecionadas = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        span {
+            padding: 0.5rem;
+            font-size: .75rem;
+            font-weight: bold;
+            color: black;
+            text-transform: uppercase;
+        }
+    }
+`;

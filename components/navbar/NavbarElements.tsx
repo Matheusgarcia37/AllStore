@@ -196,7 +196,7 @@ export const NavBarExtendedFadeContainer = styled.div`
   position: fixed;
   height: 100%;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
   opacity: ${(props) => (props['data-extendnavbar'] ? "1" : "0")};
 `;
 

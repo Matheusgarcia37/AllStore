@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BiLogOut } from 'react-icons/bi';
@@ -7,11 +7,33 @@ import { VscSignIn } from 'react-icons/vsc';
 import { StoreContext } from '../Layout';
 import { AiOutlineRight } from 'react-icons/ai';
 import { MdStorefront } from 'react-icons/md';
-import {BsBag} from 'react-icons/bs';
+import {BsBag, BsCameraFill} from 'react-icons/bs';
 import Image from 'next/image';
+import api from '../../api/api';
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
-    console.log(user)
+    const [image, setImage] = useState(null)
+
+    useEffect(() => {
+        if(user && user.Upload){
+            setImage(user.Upload.url);
+        }
+    }, [user?.Upload])    
+
+    const changeImageProfile = async (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const { data } = await api.put("/user/changeImageProfile/" + user.id, formData);
+            const { image: url } = data;
+    
+            setImage(url);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <ContainerAdmin>
             <MenuBar>
@@ -23,7 +45,11 @@ export default function NavbarAdmin( { children } ) {
                         <VscSignIn size={20} color="#fff" />
                     </Logout>
                     <Profile>
-                        <img src="https://picsum.photos/200/300" alt="profile" />
+                        <img src={image} alt="profile" />
+                        <input id="changeImageInput" type="file" style={{display: 'none'}} onChange={changeImageProfile}>
+                        </input>  
+                        <label id="changeImage" htmlFor="changeImageInput"><BsCameraFill /></label>
+                        {/*  */}
                         <span>{user?.username}</span>
                     </Profile>
                 </HeaderMenu>     
@@ -76,7 +102,9 @@ const Logout = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${({ theme }) => `RGB(${theme.colors.secondary})`};
+    background-color: ${({ theme }) => `RGB(${theme.colors.primary})`};
+    color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
     border-radius: 50%;
     padding: 15px;
     position: absolute;
@@ -138,6 +166,22 @@ const Profile = styled.div`
         width: 100px;
         height: 100px;
         border-radius: 50%;
+    }
+    #changeImage {
+        cursor: pointer;
+        position: absolute;
+
+        bottom: 24px;
+        right: 80px;
+
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        background-color: ${({ theme }) => `RGB(${theme.colors.primary})`};
+        color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     }
     span {
         font-size: .8rem;

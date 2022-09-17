@@ -52,7 +52,7 @@ export default function Index () {
                     }
                 })
 
-                setTagsToFilter([dataDefault, ...newData]);
+                setTagsToFilter([...newData]);
             }
             getTagsStore();
         }
@@ -186,6 +186,7 @@ const Categorias = styled.div`
     h1 {
         margin-top: 2rem;
         font-size: 1.2rem;
+        color: ${({ theme }) => theme.colors.primary};
     }
     ul {
         list-style: none;
@@ -195,10 +196,14 @@ const Categorias = styled.div`
                 display: block;
                 padding: .5rem 0;
                 font-size: 1rem; 
-                color: black;
+                color: ${({ theme }) => theme.colors.primary};
                 text-decoration: none;
+                transition: .3s;
+                opacity: 0.8;
                 &:hover {
-                    opacity: 0.7;
+                    opacity: 1;
+                    //color: ${({ theme }) => theme.colors.secondary};
+
                 }
             }
         }
@@ -210,6 +215,10 @@ const HeaderPage = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    color: ${({ theme }) => theme.colors.primary};
+    //text shadow color secondary
+    text-shadow: 1px 1px 2px ${({ theme }) => theme.colors.secondary};
+
 
     h1 {
         font-size: 1.6rem;

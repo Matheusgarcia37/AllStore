@@ -25,14 +25,20 @@ export default function Home() {
   });
 
   const [registroState, setRegistroState] = useState({
-    nameStore: '',
-    nameUser: '',
+    nameStore: null,
+    nameUser: null,
     typeOfStore: 'serviceSale',
-    about: '',
-    email: '',
-    password: '',
-    primaryColor: '',
-    secondaryColor: '',
+    about: null,
+    password: null,
+    primaryColor: null,
+    secondaryColor: null,
+    street: null,
+    city: null,
+    state: null,
+    number: null,
+    zip: null,
+    email: null,
+    phone: null,
   });
 
   const [file, setFile] = useState(null);
@@ -140,10 +146,20 @@ export default function Home() {
             </select>
             <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />
             {/* sobre */}
-            <textarea placeholder="Sobre" value={registroState.about} name="about" onChange={onChangeRegistro} />  
+            <textarea placeholder="Sobre" value={registroState.about} name="about" onChange={onChangeRegistro} cols={70} rows={10}/>  
+
+            {/* Adress */}
+            <input type="text" placeholder="Rua" value={registroState.street} name="street" onChange={onChangeRegistro} />
+            <input type="text" placeholder="Cidade" value={registroState.city} name="city" onChange={onChangeRegistro} />
+            <input type="text" placeholder="Estado" value={registroState.state} name="state" onChange={onChangeRegistro} />
+            <input type="text" placeholder="Número" value={registroState.number} name="number" onChange={onChangeRegistro} />
+            <input type="text" placeholder="CEP" value={registroState.zip} name="zip" onChange={onChangeRegistro} />
+
+            {/* Contact (email, phone) */}
+            <input type="text" placeholder="Email" value={registroState.email} name="email" onChange={onChangeRegistro} />
+            <input type="text" placeholder="Telefone" value={registroState.phone} name="phone" onChange={onChangeRegistro} /> 
             
             <input type="text" placeholder="Nome do usuario" value={registroState.nameUser} name="nameUser" onChange={onChangeRegistro} />
-            <input type="text" placeholder="Email do usuario" value={registroState.email} name="email" onChange={onChangeRegistro} />
             <input type="password" placeholder="Senha do usuario" value={registroState.password} name="password" onChange={onChangeRegistro} />
             {/* logo */}
             <input
@@ -214,8 +230,8 @@ const Login_Registro = styled.div`
         border-radius: 10px;
         input {
             width: 100%;
-            height: 3rem;
-            font-size: 1.5rem;
+            height: 2rem;
+            font-size: 1rem;
             border: 1px solid #ccc;
             border-radius: 10px;
             padding: 0 10px;
@@ -226,28 +242,25 @@ const Login_Registro = styled.div`
             box-sizing: border-box;
         }
         textArea {
-            width: 100%;
-            height: 3rem;
-            font-size: 1.5rem;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 0 10px;
-            margin-bottom: 10px;
-            &:focus {
-              outline: none;
-            }
-            box-sizing: border-box;
+          width: 100%;
+          height: 150px;
+          padding: 12px 10px;
+          box-sizing: border-box;
+          border: 2px solid #ccc;
+          border-radius: 4px;
+          font-size: 1rem;
+          //resize: none;
         }
         select {
             width: 100%;
-            height: 3rem;
-            font-size: 1.5rem;
+            height: 2rem;
+            font-size: 1rem;
             border: 1px solid #b4b4b4;
             border-radius: 10px;
             padding: 0 10px;
             margin-bottom: 10px;
             font-weight: normal;
-            opacity: 0.7;
+            opacity: 1;
             &:focus {
                 outline: none;
             }
@@ -257,7 +270,7 @@ const Login_Registro = styled.div`
         button {
             margin-top: 1.4rem;
             width: 100%;
-            height: 3rem;
+            height: 2rem;
             border: 1px solid #ccc;
             border-radius: 10px;
             background: ${props => `rgba(${props['data-setcolor'].color1.r}, ${props['data-setcolor'].color1.g}, ${props['data-setcolor'].color1.b}, ${props['data-setcolor'].color1.a})`};

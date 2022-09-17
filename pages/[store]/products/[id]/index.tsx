@@ -186,7 +186,7 @@ const OtherImages = styled.div`
   }
 `;
 const ButtonChangeImage = styled.div`
-  z-index: 5;
+  z-index: 1;
   position: absolute;
   right: 50px;
   :first-child {

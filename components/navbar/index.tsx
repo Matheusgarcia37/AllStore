@@ -40,6 +40,8 @@ function Navbar() {
   const NameStore = router.query.store;
   const store = React.useContext(StoreContext);
 
+  const mainContact = store?.Contact?.find((contact) => contact.main === true);
+
   const [search, setSearch] = useState('');
 
   const handleChangeSearch = (e) => {
@@ -80,11 +82,11 @@ function Navbar() {
           <NavBarHeaderContactRight>
             <p>
               <AiOutlinePhone size={20} />
-              (11) 99999-9999
+              {mainContact?.phone}
             </p>
             <p>
               <AiOutlineMail size={20} />
-              {store?.User[0]?.email}
+              {mainContact?.email}
             </p>
           </NavBarHeaderContactRight>
         </NavBarHeaderContact>
