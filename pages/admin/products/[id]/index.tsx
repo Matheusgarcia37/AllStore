@@ -285,7 +285,6 @@ const Formulario = styled.div`
             border-radius: 5px;
             font-size: .75rem;
             color: black;
-            text-transform: uppercase;
         }
     }
 `;
@@ -346,7 +345,6 @@ const Destaque = styled.div`
         border-radius: 5px;
         font-size: .75rem;
         color: black;
-        text-transform: uppercase;
     }
 `;
 

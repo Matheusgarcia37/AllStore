@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Image from 'next/image'
 import {
   NavbarContainer,
-  LeftContainer,
-  RightContainer,
+  SecondContainer,
+  FirstContainer,
   NavbarExtendedContainer,
   NavbarInnerContainer,
   NavbarLinkContainer,
@@ -20,18 +20,21 @@ import {
   NavBarHeaderContact,
   NavBarHeaderContactRight,
   NavBarHeaderContactLeft,
-  MiddleContainer,
+  ThirdContainer,
   SearchProducts,
   NavbarFooterExtendedContent,
+  FourthContainer
 } from "./NavbarElements";
 import { AiOutlineFacebook, AiOutlineHome, AiOutlineInstagram, AiOutlineMail, AiOutlinePhone, AiOutlineTwitter } from 'react-icons/ai'
-import { BsBag, BsBook, BsSearch } from 'react-icons/bs'
+import { BsBag, BsBook, BsFillCartFill, BsSearch } from 'react-icons/bs'
 import { IoMdContact } from 'react-icons/io'
 import Link from 'next/link'
 //import LogoImg from "../../images/logo.svg";
 import api from "../../api/api";
 import { useRouter } from "next/router";
 import { StoreContext } from "../../components/Layout";
+import { FaUserAlt } from "react-icons/fa";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Navbar() {
   const [extendNavbar, setExtendNavbar] = useState(false);
@@ -39,6 +42,9 @@ function Navbar() {
   const router = useRouter();
   const NameStore = router.query.store;
   const store = React.useContext(StoreContext);
+
+  const { userClient } = React.useContext(AuthContext);
+  console.log(userClient);
 
   const mainContact = store?.Contact?.find((contact) => contact.main === true);
 
@@ -91,7 +97,17 @@ function Navbar() {
           </NavBarHeaderContactRight>
         </NavBarHeaderContact>
         <NavbarContainerContent>
-          <LeftContainer>
+          <FirstContainer>
+              <OpenLinksButton
+                onClick={() => {
+                  setExtendNavbar((curr) => !curr);
+                }}
+              >
+                &#8801;
+              </OpenLinksButton>
+            <Image src={store?.Upload?.url} width={100} height={100}/>
+          </FirstContainer>
+          <SecondContainer>
             <NavbarLinkContainer>
               <Link href={`/${NameStore}`}>
                 <NavbarLink > <AiOutlineHome></AiOutlineHome> Home</NavbarLink>
@@ -105,24 +121,34 @@ function Navbar() {
               <Link  href={`/${NameStore}/about`}>
                 <NavbarLink ><BsBook></BsBook> Sobre</NavbarLink>
               </Link>
-              <OpenLinksButton
-                onClick={() => {
-                  setExtendNavbar((curr) => !curr);
-                }}
-              >
-                &#8801;
-              </OpenLinksButton>
             </NavbarLinkContainer>
-          </LeftContainer>
-          <MiddleContainer>
+          </SecondContainer>
+          <ThirdContainer>
             <SearchProducts onSubmit={handleSearch}>
               <input type="text" placeholder="Pesquisar" onChange={handleChangeSearch} value={search}/>
               <button type="submit"><BsSearch></BsSearch></button>
             </SearchProducts>
-          </MiddleContainer>
-          <RightContainer>
-            <Image src={store?.Upload?.url} width={100} height={100}/>
-          </RightContainer>
+          </ThirdContainer>
+          <FourthContainer>
+            {userClient ? (
+              <>
+                <div id="perfilUser">
+                  <FaUserAlt size={20} />
+                </div>
+                <div id="cart" onClick={() => {
+                  router.push(`/${NameStore}/cart`);
+                }}>
+                    <BsFillCartFill size={20} />
+                </div>
+              </>
+            ) : (
+              <div id="userLoginOrRegister" onClick={() => {
+                router.push(`/${NameStore}/loginUser`);
+              }}>
+                <p>Olá, faça seu login</p>  
+              </div>
+            )}
+          </FourthContainer> 
         </NavbarContainerContent> 
         <NavbarFooterExtendedContent>
             <SearchProducts>

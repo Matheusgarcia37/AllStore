@@ -1,24 +1,59 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../../../api/api";
 import styled from "styled-components";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import { StoreContext } from "../../../../components/Layout";
 
 export default function ProductPage() {
   const router = useRouter();
   const { id } = router.query;
   const [product, setProduct] = useState(null);
   const [currentImage, setCurrentImage] = useState(0);
+  const [descriptionFormated, setDescriptionFormated] = useState("");
+  const { userClient } = useContext(AuthContext);
+  const store = useContext(StoreContext);
   useEffect(() => {
     if (id) {
       const getProduct = async () => {
         const { data: product } = await api.get("/products/" + id);
+        const fullTextFormatted = product.description.replace(/.+/g, "<p class='rslines'>$&</p>");
+        setDescriptionFormated(fullTextFormatted);
         setProduct(product);
       };
       getProduct();
     }
   }, [id]);
+
+  const addProductToCart = async () => {
+    if (userClient && store) {
+      try {
+        if(userClient?.Orders?.find(order => order.finished === false)) {
+          await api.put(`/order/addProduct`, {
+            productId: product.id,
+            orderId: userClient.Orders.find(order => order.finished === false).id,
+          });
+
+          router.push(`/${store?.name}/cart`);
+        } else {
+          await api.post("/order", {
+            productId: product.id,
+            clientId: userClient.id,
+            value: product.price,
+          });
+  
+          router.push(`/${store?.name}/cart`);
+        }
+       
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      router.push(`/${store?.name}/loginUser`);
+    }
+  }
 
   return (
     <div>
@@ -101,15 +136,34 @@ export default function ProductPage() {
           )}
           <Description>
             <h2>{product.name}</h2>
-            <p>Descrição: {product.description}</p>
-            <ConsultPrice
-              onClick={(e) => {
-                e.preventDefault();
-                //consultarPreco(produto);
-              }}
-            >
-              Colsultar preço
-            </ConsultPrice>
+            <div id="bodyText">
+              <div dangerouslySetInnerHTML={{ __html: descriptionFormated }} />
+            </div>
+            { product.price && (
+               <Price>
+                <h3>R$ {product.price}</h3>
+               </Price>
+            ) }
+            {
+              store?.typeOfStore === "saleOfProducts" ? (
+                <ButtonAddToCart>
+                  <button
+                    onClick={addProductToCart}
+                  >
+                    Adicionar ao carrinho
+                  </button>
+                </ButtonAddToCart>
+              ) : (
+                <ConsultPrice
+                onClick={(e) => {
+                  e.preventDefault();
+                  //consultarPreco(produto);
+                }}
+              >
+                Colsultar preço
+              </ConsultPrice>
+              )
+            }
           </Description>
         </Content>
       )}
@@ -214,10 +268,9 @@ const Description = styled.div`
     margin-bottom: 1rem;
     color: ${({ theme }) => theme.colors.primary};
   }
-  p {
+  #bodyText {
     font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    line-height: 1rem;
   }
 
   .consultPrice {
@@ -306,3 +359,34 @@ const OtherImageCurrent = styled.div`
     margin-bottom: 0;
   }
 `;
+
+const Price = styled.div`
+  margin-top: 1rem;
+  h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const ButtonAddToCart = styled.div`
+  margin-top: 1rem;
+  button {
+    width: 100%;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.secondary};
+      color: ${({ theme }) => theme.colors.primary};
+    }
+  }
+`;
+
+

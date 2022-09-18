@@ -68,23 +68,6 @@ export const NavbarContainerContent = styled.div`
   background-color: ${({theme}) => theme.colors.primary};
 `;
 
-export const LeftContainer = styled.div`
-  flex: 22%;
-  display: flex;
-  align-items: center;
-  
-  @media (max-width: 700px) {
-    flex: 0%;
-  }
-`;
-
-export const RightContainer = styled.div`
-  flex: 10%;
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 20px;
-`;
-
 export const NavbarInnerContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -131,18 +114,6 @@ export const Logo = styled.img`
   height: auto;
 `;
 
-export const OpenLinksButton = styled.button`
-  width: 70px;
-  height: 50px;
-  background: none;
-  border: none;
-  color: ${({theme}) => theme.colors.secondary};
-  font-size: 38px;
-  cursor: pointer;
-  @media (min-width: 700px) {
-    display: none;
-  }
-`;
 
 export const NavbarExtendedLinkContainer = styled.div`
   display: flex;
@@ -228,14 +199,89 @@ export const NavbarExtendedContainer = styled.div`
   }
 `;
 
-export const MiddleContainer = styled.div`
-  display: flex;
-  flex: 90%;
+
+export const OpenLinksButton = styled.button`
+  width: 70px;
+  height: 50px;
+  background: none;
+  border: none;
+  color: ${({theme}) => theme.colors.secondary};
+  font-size: 38px;
+  cursor: pointer;
+  @media (min-width: 700px) {
+    display: none;
+  }
+`;
+
+export const FirstContainer = styled.div`
+  flex: 8%;
   align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px;
+  justify-content: flex-start;
+ 
+
+  @media (max-width: 700px) {
+    flex: 50%;
+    
+  }
+`;
+
+  export const SecondContainer = styled.div`
+    flex: 15%;
+    display: flex;
+    align-items: center;
+    
+    @media (max-width: 700px) {
+      flex: 0%;
+    }
+  `;
+
+export const ThirdContainer = styled.div`
+  display: flex;
+  flex: 70%;
+  align-items: center;
+
+  @media (max-width: 1640px) {
+    flex: 65%;
+    }
   
   @media (max-width: 700px) {
     display: none;
   }
+`;
+
+export const FourthContainer = styled.div`
+  padding: 0 20px;
+  flex: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${({theme}) => theme.colors.secondary};
+  svg {
+    cursor: pointer;
+  }
+
+  #userLoginOrRegister {
+    align-items: center;
+    font-size: .9rem;
+    cursor: pointer;
+  }
+
+  #perfilUser {
+    border-right: 1px solid ${({theme}) => theme.colors.secondary};
+    margin-right: 10px;
+    padding-right: 10px;
+  }
+  #cart {
+  }
+
+  @media (max-width: 700px) {
+    flex: 50%;
+    justify-content: flex-end;
+  } 
 `;
 
 export const NavbarFooterExtendedContent = styled.div`

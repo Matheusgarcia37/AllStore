@@ -6,21 +6,31 @@ type FormLogin = {
     username: string;
     password: string;
 }
+
+type FormLoginClient = {
+    username: string;
+    password: string;
+    storeId: string;
+}
 type User = {
     id: string;
     username: string;
 } | any;
+
 type AuthContextType = {
     user: User | null;
     isAuthenticated: boolean;
     signIn: (data: FormLogin) => Promise<void>;
     logout: () => void;
+    signInClient: (data: FormLoginClient) => Promise<void>;
+    userClient: User | null;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: any }) {
     const [user, setUser] = useState<User | null>(null);
+    const [userClient, setUserClient] = useState<User | null>(null);
     const isAuthenticated = !!user;
 
     useEffect(() => {
@@ -30,7 +40,13 @@ export function AuthProvider({ children }: { children: any }) {
                 try {
                     const res = await api.post("/user/getUserByToken", { token })
                     console.log(res.data);
-                    setUser(res.data);
+                    if(res.data.typeOfUser === "user"){
+                        setUserClient(res.data);
+                    } else if(res.data.typeOfUser === "admin"){
+                        setUser(res.data);
+                    } else {
+                        setUser(null);
+                    }
                 } catch (error) {
                     localStorage.removeItem("token");
                     setUser(null);
@@ -52,7 +68,21 @@ export function AuthProvider({ children }: { children: any }) {
         setUser(data.user);
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         Router.push('/admin');
-        
+    }
+
+    async function signInClient({ username, password, storeId }: FormLoginClient) {
+        const { data } = await api.post('/user/authClient',
+            {
+                username,
+                password,
+                storeId
+            });
+        console.log(data);
+        const { token } = data;
+        localStorage.setItem("token", token);
+        setUserClient(data.user);
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        //Router.push('/');
     }
 
     async function logout() {
@@ -62,7 +92,7 @@ export function AuthProvider({ children }: { children: any }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, logout }}>
+        <AuthContext.Provider value={{ user, userClient, isAuthenticated, signIn, signInClient, logout }}>
             {children}
         </AuthContext.Provider>
     )
