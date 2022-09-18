@@ -20,6 +20,34 @@ export default function Index() {
             getCurrentOrder();
         }
     }, [userClient])
+
+    
+    const handleIncrement = async (orderProduct) => {
+        try {
+        await api.put(`/order/incrementProducts`,{
+            orderId: orderProduct.orderId,
+            productId: orderProduct.productId,
+        });
+        const { data } = await api.get(`/order/${userClient.id}`);
+        setCart(data);
+        } catch (error) {
+        console.log(error);
+        }
+    };
+
+    const handleDecrement = async (orderProduct) => {
+        try {
+        await api.put(`/order/decrementProducts`,{
+            orderId: orderProduct.orderId,
+            productId: orderProduct.productId,
+        });
+        const { data } = await api.get(`/order/${userClient.id}`);
+        setCart(data);
+        } catch (error) {
+        console.log(error);
+        }
+    };
+  
     return (
         <Container>
             <h1>Cart</h1>
@@ -30,9 +58,9 @@ export default function Index() {
                     <Image src={orderProduct.Product.Upload[0].url || emptyImage} width={100} height={100} />
                     <p>{orderProduct.Product.price}</p>
                     <div className="quantity">
-                        <button>-</button>
+                        <button onClick={() => {handleDecrement(orderProduct)}}>-</button>
                         <p>{orderProduct.quantity}</p>
-                        <button>+</button>
+                        <button onClick={() => {handleIncrement(orderProduct)}}>+</button>
                     </div>
                 </ProductCart>
             ))}
