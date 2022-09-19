@@ -269,12 +269,18 @@ export const FourthContainer = styled.div`
     align-items: center;
     font-size: .9rem;
     cursor: pointer;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
   }
 
   #perfilUser {
     border-right: 1px solid ${({theme}) => theme.colors.secondary};
     margin-right: 10px;
     padding-right: 10px;
+
   }
   #cart {
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import {
   NavbarContainer,
   SecondContainer,
@@ -23,12 +23,19 @@ import {
   ThirdContainer,
   SearchProducts,
   NavbarFooterExtendedContent,
-  FourthContainer
+  FourthContainer,
 } from "./NavbarElements";
-import { AiOutlineFacebook, AiOutlineHome, AiOutlineInstagram, AiOutlineMail, AiOutlinePhone, AiOutlineTwitter } from 'react-icons/ai'
-import { BsBag, BsBook, BsFillCartFill, BsSearch } from 'react-icons/bs'
-import { IoMdContact } from 'react-icons/io'
-import Link from 'next/link'
+import {
+  AiOutlineFacebook,
+  AiOutlineHome,
+  AiOutlineInstagram,
+  AiOutlineMail,
+  AiOutlinePhone,
+  AiOutlineTwitter,
+} from "react-icons/ai";
+import { BsBag, BsBook, BsFillCartFill, BsSearch } from "react-icons/bs";
+import { IoMdContact } from "react-icons/io";
+import Link from "next/link";
 //import LogoImg from "../../images/logo.svg";
 import api from "../../api/api";
 import { useRouter } from "next/router";
@@ -36,27 +43,31 @@ import { StoreContext } from "../../components/Layout";
 import { FaUserAlt } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
 
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+
 function Navbar() {
   const [extendNavbar, setExtendNavbar] = useState(false);
-  
+
   const router = useRouter();
   const NameStore = router.query.store;
   const store = React.useContext(StoreContext);
 
-  const { userClient } = React.useContext(AuthContext);
+  const { userClient, logout } = React.useContext(AuthContext);
   console.log(userClient);
 
   const mainContact = store?.Contact?.find((contact) => contact.main === true);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
-  }
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if(search && search !== "") {
+    if (search && search !== "") {
       const inputSearch = search;
       //setSearch('');
       router.push(`/${NameStore}/products?search=${inputSearch}`);
@@ -64,11 +75,30 @@ function Navbar() {
       //setSearch('');
       router.push(`/${NameStore}/products`);
     }
-  }
+  };
 
   const closeMenuExtended = () => {
     setExtendNavbar((curr) => !curr);
-  }
+  };
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3"> Olá, {userClient?.username}! </Popover.Header>
+      <Popover.Body>
+        <Link href={`/${NameStore}/profile`}>
+          <a style={{textDecoration: 'none'}}>Meu Perfil</a>
+        </Link>
+        <br />
+        <Link href={`/${NameStore}/orders`}>
+          <a style={{textDecoration: 'none'}}>Meus Pedidos</a>
+        </Link>
+        <br />
+        <Button variant="link" onClick={logout} style={{textDecoration: 'none', padding: 0}}>
+          Sair
+        </Button>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <NavbarContainer data-extendnavbar={extendNavbar}>
@@ -78,7 +108,7 @@ function Navbar() {
             <a href="#">
               <AiOutlineFacebook size={20} />
             </a>
-            <a href="#">       
+            <a href="#">
               <AiOutlineTwitter size={20} />
             </a>
             <a href="#">
@@ -98,79 +128,120 @@ function Navbar() {
         </NavBarHeaderContact>
         <NavbarContainerContent>
           <FirstContainer>
-              <OpenLinksButton
-                onClick={() => {
-                  setExtendNavbar((curr) => !curr);
-                }}
-              >
-                &#8801;
-              </OpenLinksButton>
-            <Image src={store?.Upload?.url} width={100} height={100}/>
+            <OpenLinksButton
+              onClick={() => {
+                setExtendNavbar((curr) => !curr);
+              }}
+            >
+              &#8801;
+            </OpenLinksButton>
+            <Image src={store?.Upload?.url} width={100} height={100} />
           </FirstContainer>
           <SecondContainer>
             <NavbarLinkContainer>
               <Link href={`/${NameStore}`}>
-                <NavbarLink > <AiOutlineHome></AiOutlineHome> Home</NavbarLink>
+                <NavbarLink>
+                  {" "}
+                  <AiOutlineHome></AiOutlineHome> Home
+                </NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}/products`}>
-                <NavbarLink ><BsBag></BsBag> Produtos</NavbarLink>
+              <Link href={`/${NameStore}/products`}>
+                <NavbarLink>
+                  <BsBag></BsBag> Produtos
+                </NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}/contact`}>
-                <NavbarLink ><IoMdContact></IoMdContact> Contato</NavbarLink>
+              <Link href={`/${NameStore}/contact`}>
+                <NavbarLink>
+                  <IoMdContact></IoMdContact> Contato
+                </NavbarLink>
               </Link>
-              <Link  href={`/${NameStore}/about`}>
-                <NavbarLink ><BsBook></BsBook> Sobre</NavbarLink>
+              <Link href={`/${NameStore}/about`}>
+                <NavbarLink>
+                  <BsBook></BsBook> Sobre
+                </NavbarLink>
               </Link>
             </NavbarLinkContainer>
           </SecondContainer>
           <ThirdContainer>
             <SearchProducts onSubmit={handleSearch}>
-              <input type="text" placeholder="Pesquisar" onChange={handleChangeSearch} value={search}/>
-              <button type="submit"><BsSearch></BsSearch></button>
+              <input
+                type="text"
+                placeholder="Pesquisar"
+                onChange={handleChangeSearch}
+                value={search}
+              />
+              <button type="submit">
+                <BsSearch></BsSearch>
+              </button>
             </SearchProducts>
           </ThirdContainer>
           <FourthContainer>
             {userClient ? (
               <>
                 <div id="perfilUser">
-                  <FaUserAlt size={20} />
+                
+                  <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+                    <Button variant=""><FaUserAlt size={20} /></Button>
+                  </OverlayTrigger>
                 </div>
-                <div id="cart" onClick={() => {
-                  router.push(`/${NameStore}/cart`);
-                }}>
-                    <BsFillCartFill size={20} />
-                </div>  
+                <div
+                  id="cart"
+                  onClick={() => {
+                    router.push(`/${NameStore}/cart`);
+                  }}
+                >
+                  <BsFillCartFill size={20} />
+                </div>
               </>
             ) : (
-              <div id="userLoginOrRegister" onClick={() => {
-                router.push(`/${NameStore}/loginUser`);
-              }}>
-                <p>Olá, faça seu login</p>  
+              <div
+                id="userLoginOrRegister"
+                onClick={() => {
+                  router.push(`/${NameStore}/loginUser`);
+                }}
+              >
+                <p>Olá, faça seu login</p>
               </div>
             )}
-          </FourthContainer> 
-        </NavbarContainerContent> 
+          </FourthContainer>
+        </NavbarContainerContent>
         <NavbarFooterExtendedContent>
-            <SearchProducts>
-              <input type="text" placeholder="Pesquisar" onChange={handleChangeSearch} value={search}/>
-              <button onClick={handleSearch}><BsSearch></BsSearch></button>
-            </SearchProducts>
+          <SearchProducts>
+            <input
+              type="text"
+              placeholder="Pesquisar"
+              onChange={handleChangeSearch}
+              value={search}
+            />
+            <button onClick={handleSearch}>
+              <BsSearch></BsSearch>
+            </button>
+          </SearchProducts>
         </NavbarFooterExtendedContent>
       </NavbarInnerContainer>
       <NavbarExtendedContainer data-extendnavbar={extendNavbar}>
         <NavbarExtendedLinkContainer data-extendnavbar={extendNavbar}>
           <NavbarExtendedLinksContainer>
-            <Link href={`/${NameStore}`} >
-              <NavbarLinkExtended  onClick={closeMenuExtended}> <AiOutlineHome></AiOutlineHome>Home</NavbarLinkExtended>
+            <Link href={`/${NameStore}`}>
+              <NavbarLinkExtended onClick={closeMenuExtended}>
+                {" "}
+                <AiOutlineHome></AiOutlineHome>Home
+              </NavbarLinkExtended>
             </Link>
             <Link href={`/${NameStore}/products`}>
-              <NavbarLinkExtended onClick={closeMenuExtended}><BsBag></BsBag>Produtos</NavbarLinkExtended>
+              <NavbarLinkExtended onClick={closeMenuExtended}>
+                <BsBag></BsBag>Produtos
+              </NavbarLinkExtended>
             </Link>
-            <Link  href={`/${NameStore}/contact`}>
-              <NavbarLinkExtended onClick={closeMenuExtended}><IoMdContact></IoMdContact>Contato</NavbarLinkExtended>
+            <Link href={`/${NameStore}/contact`}>
+              <NavbarLinkExtended onClick={closeMenuExtended}>
+                <IoMdContact></IoMdContact>Contato
+              </NavbarLinkExtended>
             </Link>
-            <Link  href={`/${NameStore}/about`}>
-              <NavbarLinkExtended onClick={closeMenuExtended}><BsBook></BsBook>Sobre</NavbarLinkExtended>
+            <Link href={`/${NameStore}/about`}>
+              <NavbarLinkExtended onClick={closeMenuExtended}>
+                <BsBook></BsBook>Sobre
+              </NavbarLinkExtended>
             </Link>
           </NavbarExtendedLinksContainer>
           <RedesSociaisBarExtended>
@@ -180,8 +251,8 @@ function Navbar() {
               </a>
             </Link>
             <Link href="#">
-              <a > 
-              <AiOutlineInstagram size={30} />
+              <a>
+                <AiOutlineInstagram size={30} />
               </a>
             </Link>
             <Link href="#">
@@ -193,11 +264,13 @@ function Navbar() {
         </NavbarExtendedLinkContainer>
       </NavbarExtendedContainer>
       {extendNavbar && (
-        <NavBarExtendedFadeContainer data-extendnavbar={extendNavbar} onClick={closeMenuExtended}>
-          <NavbarLinkCloseExtended >
-            &#10006;
-          </NavbarLinkCloseExtended>
-        </NavBarExtendedFadeContainer>)}
+        <NavBarExtendedFadeContainer
+          data-extendnavbar={extendNavbar}
+          onClick={closeMenuExtended}
+        >
+          <NavbarLinkCloseExtended>&#10006;</NavbarLinkCloseExtended>
+        </NavBarExtendedFadeContainer>
+      )}
     </NavbarContainer>
   );
 }

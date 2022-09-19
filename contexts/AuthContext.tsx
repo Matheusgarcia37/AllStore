@@ -87,8 +87,14 @@ export function AuthProvider({ children }: { children: any }) {
 
     async function logout() {
         localStorage.removeItem("token");
-        setUser(null);
-        Router.push('/');
+        if(user){
+            setUser(null);
+            Router.push('/');
+        } else if(userClient){
+            const storeName = userClient?.Store?.name;
+            setUserClient(null);
+            Router.push(`/${storeName}`);
+        }
     }
 
     return (

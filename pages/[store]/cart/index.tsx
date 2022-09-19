@@ -79,17 +79,30 @@ export default function Index() {
 
   const handleCheckout = async () => {
     try {
-      await api.put(`/order/finishOrder`, {
-        orderId: cart.id,
-      });
-      getCurrentOrder();
+      //swal com tem certeza, confirmação
       Swal.fire({
-        title: "Pedido realizado com sucesso!",
-        icon: "success",
-        confirmButtonText: "Ok",
-      }).then((result) => {
-        if (result.isConfirmed) {
-            router.push(`/${store?.name}`)
+        title: "Tem certeza?",
+        text: "Você não poderá desfazer essa ação!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, finalizar!",
+      }).then(async (result) => {
+        if(result.isConfirmed){
+          await api.put(`/order/finishOrder`, {
+            orderId: cart.id,
+          });
+          getCurrentOrder();
+          Swal.fire({
+            title: "Pedido realizado com sucesso!",
+            icon: "success",
+            confirmButtonText: "Ok",
+          }).then((result) => {
+            if (result.isConfirmed) {
+                router.push(`/${store?.name}`)
+            }
+          });
         }
       });
     } catch (error) {
