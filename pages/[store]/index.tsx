@@ -40,7 +40,7 @@ export default function Index() {
                                 <Image src={semFoto} alt='Sem foto' width={200} height={200}/>
                   )}
                 <strong>{produto.name}</strong>
-                <span>{produto.price}</span>
+                <span>R$ {Number(produto.price).toFixed(2)}</span>
               </li>
             ))}
           </ul>

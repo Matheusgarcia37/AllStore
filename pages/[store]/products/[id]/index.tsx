@@ -30,7 +30,24 @@ export default function ProductPage() {
   const addProductToCart = async () => {
     if (userClient && store) {
       try {
-        if(userClient?.Orders?.find(order => order.finished === false)) {
+        const { data } = await api.get(`/order/${userClient.id}`);
+        if (data) {
+          await api.put(`/order/addProduct`, {
+            productId: product.id,
+            orderId: data.id,
+          });
+
+          router.push(`/${store?.name}/cart`);
+        } else {
+          await api.post("/order", {
+            productId: product.id,
+            clientId: userClient.id,
+            value: product.price,
+          });
+  
+          router.push(`/${store?.name}/cart`);
+        }
+       /*  if(userClient?.Orders?.find(order => order.finished === false)) {
           await api.put(`/order/addProduct`, {
             productId: product.id,
             orderId: userClient.Orders.find(order => order.finished === false).id,
@@ -45,7 +62,7 @@ export default function ProductPage() {
           });
   
           router.push(`/${store?.name}/cart`);
-        }
+        } */
        
       } catch (error) {
         console.log(error);
@@ -141,7 +158,7 @@ export default function ProductPage() {
             </div>
             { product.price && (
                <Price>
-                <h3>R$ {product.price}</h3>
+                <h3>R$ {Number(product.price).toFixed(2)}</h3>
                </Price>
             ) }
             {

@@ -116,7 +116,7 @@ export default function Index () {
                             )}
                             <Description>
                                 <strong>{produto.name}</strong>
-                                <span>{produto.price}</span>
+                                <span>R$ {Number(produto.price).toFixed(2)}</span>
                             </Description>
                         </li>
                         ))}

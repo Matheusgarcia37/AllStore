@@ -139,7 +139,7 @@ function Navbar() {
                   router.push(`/${NameStore}/cart`);
                 }}>
                     <BsFillCartFill size={20} />
-                </div>
+                </div>  
               </>
             ) : (
               <div id="userLoginOrRegister" onClick={() => {

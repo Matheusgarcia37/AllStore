@@ -51,7 +51,8 @@ export const NavBarHeaderContactRight = styled.div`
     font-size: .8rem;
     align-items: center;
     font-weight: bold;
-
+    margin-top: 0%;
+    margin-bottom: 0;
     svg {
       margin-right: 5px;
     }
