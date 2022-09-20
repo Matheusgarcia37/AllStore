@@ -10,9 +10,14 @@ import { MdStorefront } from 'react-icons/md';
 import {BsBag, BsCameraFill} from 'react-icons/bs';
 import Image from 'next/image';
 import api from '../../api/api';
+import { GoListUnordered } from 'react-icons/go';
+import { FiUsers } from 'react-icons/fi';
+import { useRouter } from 'next/router';
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
     const [image, setImage] = useState(null)
+
+    const router = useRouter();
 
     useEffect(() => {
         if(user && user.Upload){
@@ -39,7 +44,9 @@ export default function NavbarAdmin( { children } ) {
             <MenuBar>
                 <HeaderMenu>
                     <Logo>{user && (
-                        <Image src={user.Store?.Upload.url} width={70} height={70}></Image>
+                        <Image src={user.Store?.Upload.url} width={70} height={70} onClick={() => {
+                            router.push('/' + user.Store.name);
+                        }} style={{cursor:'pointer'}}></Image>
                     )}</Logo>
                     <Logout onClick={logout}>
                         <VscSignIn size={20} color="#fff" />
@@ -62,6 +69,18 @@ export default function NavbarAdmin( { children } ) {
                     <Item>
                         <Link href="/admin/products">
                             <a><BsBag/> Produtos <AiOutlineRight/></a>
+                        </Link>
+                    </Item>
+                    { user?.Store?.typeOfStore === 'saleOfProducts' && (
+                        <Item>
+                            <Link href="/admin/orders">
+                                <a><GoListUnordered/> Pedidos <AiOutlineRight/></a>
+                            </Link>
+                        </Item>
+                    )}
+                    <Item>
+                        <Link href="/admin/users">
+                            <a><FiUsers/> Usuários <AiOutlineRight/></a>
                         </Link>
                     </Item>
                 </Items>

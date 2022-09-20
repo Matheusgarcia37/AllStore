@@ -85,12 +85,12 @@ function Navbar() {
     <Popover id="popover-basic">
       <Popover.Header as="h3"> Olá, {userClient?.username}! </Popover.Header>
       <Popover.Body>
-        <Link href={`/${NameStore}/profile`}>
-          <a style={{textDecoration: 'none'}}>Meu Perfil</a>
-        </Link>
-        <br />
         <Link href={`/${NameStore}/orders`}>
           <a style={{textDecoration: 'none'}}>Meus Pedidos</a>
+        </Link>
+        <br />
+        <Link href={`/${NameStore}/editUser`}>
+          <a style={{textDecoration: 'none'}}>Editar usuário</a>
         </Link>
         <br />
         <Button variant="link" onClick={logout} style={{textDecoration: 'none', padding: 0}}>

@@ -4,6 +4,9 @@ import { MdAdd } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
 import api from '../../../api/api';
 import { AuthContext } from '../../../contexts/AuthContext';
+import Table from 'react-bootstrap/Table';
+import { AiFillEdit } from 'react-icons/ai';
+import { BsFillTrashFill } from 'react-icons/bs';
 export default function Products() {
     const [products, setProducts] = useState([]);
     const { user } = useContext(AuthContext);
@@ -69,31 +72,25 @@ export default function Products() {
                                 <th>Nome</th>
                                 <th>Preço</th>
                                 <th>Categoria</th>
-                                <th>Ações</th>
+                                <th>Editar</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* <tr>
-                            <td>Camiseta</td>
-                            <td>R$ 50,00</td>
-                            <td>Manga longa</td>
-                            <td>
-                                <ButtonEdit>Editar</ButtonEdit>
-                                <ButtonDelete>Excluir</ButtonDelete>
-                            </td>
-                        </tr> */}
                             {products.map((product) => (
                                 <tr key={product.id}>
                                     <td>{product.name}</td>
                                     <td>{product.price}</td>
                                     <td>{product.Tag[0]?.name}</td>
                                     <td>
-                                        <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
+                                        <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`} style={{textDecoration: 'none'}}>
                                             <a>
-                                                <ButtonEdit>Editar</ButtonEdit>
+                                                <AiFillEdit size={25} color="#000" />
                                             </a>
                                         </Link>
-                                        <ButtonDelete onClick={() => { deleteProduct(product.id) }} >Excluir</ButtonDelete>
+                                    </td>
+                                    <td>
+                                        <BsFillTrashFill onClick={() => { deleteProduct(product.id) }} style={{cursor:'pointer'}} size={25}>Excluir</BsFillTrashFill>
                                     </td>
                                 </tr>
                             ))}
@@ -128,6 +125,7 @@ const HeaderPage = styled.div`
     height: 5rem;
     position: relative;
     width: 100%;
+    margin-bottom: 2rem;
     //shadow
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     h1 {
@@ -137,52 +135,17 @@ const HeaderPage = styled.div`
         color: black;
         text-transform: uppercase;
     }
-        a {
-            text-decoration: none;
-            Button {
-            display: flex;
-            align-items: center;
-            background-color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
-            svg {
-                margin-right: 0.5rem;
-            }
-        }
-    }
 `;
 const Content = styled.div`
     height: 100%;
-    width: 100%;
-    margin-top: 2rem;
-`;
-
-const Table = styled.table`
+    width: 96%;
+   
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     margin-left: auto;
     margin-right: auto;
-    width: 96%;
+    
     border-collapse: collapse;
-    thead {
-        tr {
-            th {
-                padding: 1rem;
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: black;
-                text-transform: uppercase;
-            }
-        }
-    }
-    tbody {
-        tr {
-            td {
-                padding: 1rem;
-                font-size: 1.2rem;
-                color: black;
-                text-align: center;
-            }
-        }
-    }
 `;
 
 const Button = styled.button`
@@ -196,45 +159,6 @@ const Button = styled.button`
     margin-right: 1rem;
     &:hover {
         opacity: 0.8;
-    }
-`;
-const ButtonDelete = styled.button`
-    cursor: pointer;
-    margin-left: 1rem;
-    border: none;
-    background-color: ${({ theme }) => `Rgb(${theme.colors.secondary})`};
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    &:hover {
-        opacity: 0.8;
-    }
-`;
-const ButtonEdit = styled.button`
-    cursor: pointer;
-    border: none;
-    background-color: ${({ theme }) => `Rgb(${theme.colors.secondary})`};
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    &:hover {
-        opacity: 0.8;
-    }
-`;
-const ButtonAdd = styled.button`
-    border: none;
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    &:hover {
-        opacity: 0
     }
 `;
 

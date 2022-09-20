@@ -1,40 +1,49 @@
-import { StoreContext } from "../../../components/Layout";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import api from "../../../api/api";
+import { useState } from 'react';
+import styled from 'styled-components';
 
-import Table from "react-bootstrap/Table";
-import { AiFillEye } from "react-icons/ai";
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../../../contexts/AuthContext';
+import api from '../../../api/api';
+
+import Table from 'react-bootstrap/Table';
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-export default function Orders() {
-    const store = useContext(StoreContext);
-    const { userClient } = useContext(AuthContext);
-    const [orders, setOrders] = useState(null);
-    const [currentOrderProducts, setCurrentOrderProducts] = useState(null);
+import { AiFillEye } from 'react-icons/ai';
 
-    const getOrders = async () => {
-        const { data } = await api.get(`/order/getOrders/${userClient.id}`);
-        setOrders(data);
-        console.log(data);
-    };
+export default function Index(){
+
+    const { user } = useContext(AuthContext);
+    const [orders, setOrders] = useState([]);
+   
+    const [currentOrderProducts, setCurrentOrderProducts] = useState(null);
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     useEffect(() => {
-        if(userClient) {
-            getOrders();
+        if(user) {
+          const getOrdersFromStore = async () => {
+            const { data } = await api.get("/order/store/" + user.Store.id);
+            setOrders(data);
+            console.log(data)
+          }
+          getOrdersFromStore();
         }
-    },[userClient]);
-  return (
-    <div>
-      <h1>Historico de seus pedidos</h1>
-      <Table hover bordered>
+      }, [user]);
+
+      const handleClose = () => setShow(false);
+      const handleShow = () => setShow(true);
+
+ 
+    return (
+        <Container> 
+           <HeaderPage>
+                <h1>Pedidos da loja</h1>
+           </HeaderPage>
+            <Content>
+            <Table hover bordered>
               <thead>
                 <tr>
-                  <th>Numero</th>
+                  <th>Cliente</th>
                   <th>Valor Total</th>
                   <th>Produtos</th>
                   <th>Data do Pedido</th>
@@ -54,7 +63,7 @@ export default function Orders() {
                   return (
                       <tr key={orderProduct.productId}>
                         <td>
-                          {key + 1}
+                           {orderProduct.User.username}
                         </td>
                         <td>
                           R$ {totalValue.toFixed(2)}
@@ -128,7 +137,44 @@ export default function Orders() {
           </Button>
         </Modal.Footer>
       </Modal>
-
-    </div>
-  );
+            </Content>
+        </Container>
+    );
 }
+
+const Container = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+`;
+const HeaderPage = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 5rem;
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+    //shadow
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    h1 {
+        padding-left: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+    }
+`;
+const Content = styled.div`
+    height: 100%;
+    width: 96%;
+   
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    margin-left: auto;
+    margin-right: auto;
+    
+    border-collapse: collapse;
+`;
+

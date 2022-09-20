@@ -228,6 +228,10 @@ const Login_Registro = styled.div`
         padding-top: 3rem;
         margin: 0;
         border-radius: 10px;
+        iframe#frameEspecificacoes::-webkit-scrollbar { 
+          display: none;
+        }
+        overflow-y: hidden;
         input {
             width: 100%;
             height: 2rem;
@@ -279,6 +283,9 @@ const Login_Registro = styled.div`
             &:focus {
                 outline: none;
             }
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 `;

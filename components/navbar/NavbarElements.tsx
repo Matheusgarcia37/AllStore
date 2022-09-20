@@ -96,6 +96,12 @@ export const NavbarLink = styled.a`
     display: none;
   }
   cursor: pointer;
+
+  :hover {
+    opacity: 0.8;
+    color: ${({theme}) => theme.colors.secondary};
+  }
+
 `;
 
 export const NavbarLinkExtended = styled.a`
