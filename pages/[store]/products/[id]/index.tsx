@@ -27,6 +27,16 @@ export default function ProductPage() {
     }
   }, [id]);
 
+  const handleConsultBudget = () => {
+    //send message to whatsapp of store with data of product
+    const mainContact = store?.Contact.find((contact) => contact.main === true);
+
+    const message = `Olá, gostaria de um orçamento para o produto ${product.name} do site ${store.name}.`;
+
+    const url = `https://api.whatsapp.com/send?phone=${mainContact.phone}&text=${message}`;
+    window.open(url, "_blank");
+  }
+
   const addProductToCart = async () => {
     if (userClient && store) {
       try {
@@ -172,12 +182,9 @@ export default function ProductPage() {
                 </ButtonAddToCart>
               ) : (
                 <ConsultPrice
-                onClick={(e) => {
-                  e.preventDefault();
-                  //consultarPreco(produto);
-                }}
+                onClick={handleConsultBudget}
               >
-                Colsultar preço
+                Fazer orçamento
               </ConsultPrice>
               )
             }

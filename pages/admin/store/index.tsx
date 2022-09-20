@@ -6,6 +6,7 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import api from '../../../api/api';
 
 import { SketchPicker, ChromePicker } from 'react-color';
+import Swal from 'sweetalert2';
 export default function Index(){
 
     const { user } = useContext(AuthContext);
@@ -193,8 +194,20 @@ export default function Index(){
         try {
             const { data: dataResponse } = await api.put('/store/' + user.Store.id, formData);
             console.log(dataResponse);
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Dados alterados com sucesso!',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            })
         } catch (error) {
             console.log(error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Erro ao alterar dados!',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
         }
     }
 

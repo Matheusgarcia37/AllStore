@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
+import styled from "styled-components";
+
 export default function Login_register_user() {
   const router = useRouter();
   const store = useContext(StoreContext);
@@ -56,27 +58,9 @@ export default function Login_register_user() {
   };
   return (
     <div>
-      <div>
-        <h1>Login</h1>
-        {/* <form onSubmit={handleSubmit}>
-                <input
-                type="text"
-                placeholder="Nome de usuário"
-                name="username"
-                value={user.username}
-                onChange={handleChange}
-                />
-                <input
-                type="password"
-                name="password"
-                placeholder="Senha"
-                value={user.password}
-                onChange={handleChange}
-                />
-                <button type="submit">
-                Entrar
-                </button>
-            </form> */}
+      <Content>
+        <h3>Login</h3>
+        
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label>Nome de usuário</Form.Label>
@@ -103,7 +87,23 @@ export default function Login_register_user() {
             <a>Cadastre-se</a>
           </Link>
         </p>
-      </div>
+      </Content>
     </div>
   );
 }
+
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    margin: 20px 0;
+  }
+  padding: 10px;
+  margin: 0 1rem;
+  
+  button {
+    margin: 10px 0;
+  }
+`;

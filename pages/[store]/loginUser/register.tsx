@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
+import styled from "styled-components";
+
 export default function Register() {
   const store = useContext(StoreContext);
 
@@ -14,6 +16,11 @@ export default function Register() {
     username: "",
     password: "",
     confirmPassword: "",
+    name: "",
+    email: "",
+    phone: "",
+    cpf: "",
+    address: "",
   });
 
   const handleChange = (e) => {
@@ -34,13 +41,22 @@ export default function Register() {
       });
       return;
     }
-    const formData = {
+    const formDataUser = {
       username: register.username,
       password: register.password,
       storeId: store.id,
     };
+
+    const formDataPerson = {
+      name: register.name,
+      email: register.email,
+      phone: register.phone,
+      cpf: register.cpf,
+      address: register.address,
+      storeId: store.id,
+    };
     try {
-      const { data } = await api.post("/user/storeUserClient", formData);
+      const { data } = await api.post("/user/storeUserClient", { formDataUser , formDataPerson});
       if (data) {
         Swal.fire({
           title: "Sucesso!",
@@ -61,7 +77,9 @@ export default function Register() {
 
   return (
     <div>
-      <h1>Registre um usuário para o site {store?.name}</h1>
+      <Content>
+      
+      <h3>Registrar</h3>
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicUsername">
@@ -96,6 +114,63 @@ export default function Register() {
              required
           />
         </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicName">
+          <Form.Label>Nome</Form.Label>
+          <Form.Control
+             type="text"
+             placeholder="Digite seu nome"
+             name="name"
+             onChange={handleChange}
+             required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+              type="email"
+              placeholder="Digite seu email"
+              name="email"
+              onChange={handleChange}
+              required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPhone">
+          <Form.Label>Telefone</Form.Label>
+          <Form.Control
+              type="text"
+              placeholder="Digite seu telefone"
+              name="phone"
+              onChange={handleChange}
+              required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicCpf">
+          <Form.Label>CPF</Form.Label>
+          <Form.Control
+              type="text"
+              placeholder="Digite seu CPF"
+              name="cpf"
+              onChange={handleChange}
+              required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicAddress">
+          <Form.Label>Endereço</Form.Label>
+          <Form.Control
+              type="text"
+              placeholder="Digite seu endereço completo"
+              name="address"
+              onChange={handleChange}
+              required
+          />
+        </Form.Group>
+
+
         <Button variant="primary" type="submit">
             Registrar
         </Button>
@@ -103,6 +178,25 @@ export default function Register() {
       <Link href={`/${store?.name}/loginUser`}>
           <a>Já tenho conta</a>
       </Link>
+
+        
+      </Content>
     </div>
   );
 }
+
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    margin: 20px 0;
+  }
+  padding: 10px;
+  margin: 0 1rem;
+
+  button {
+    margin: 10px 0;
+  }
+`;

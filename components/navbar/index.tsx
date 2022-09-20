@@ -175,35 +175,39 @@ function Navbar() {
               </button>
             </SearchProducts>
           </ThirdContainer>
-          <FourthContainer>
-            {userClient ? (
-              <>
-                <div id="perfilUser">
-                
-                  <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-                    <Button variant=""><FaUserAlt size={20} /></Button>
-                  </OverlayTrigger>
-                </div>
+          {
+            store?.typeOfStore === "saleOfProducts" && (
+              <FourthContainer>
+              {userClient ? (
+                <>
+                  <div id="perfilUser">
+                  
+                    <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+                      <Button variant=""><FaUserAlt size={20} /></Button>
+                    </OverlayTrigger>
+                  </div>
+                  <div
+                    id="cart"
+                    onClick={() => {
+                      router.push(`/${NameStore}/cart`);
+                    }}
+                  >
+                    <BsFillCartFill size={20} />
+                  </div>
+                </>
+              ) : (
                 <div
-                  id="cart"
+                  id="userLoginOrRegister"
                   onClick={() => {
-                    router.push(`/${NameStore}/cart`);
+                    router.push(`/${NameStore}/loginUser`);
                   }}
                 >
-                  <BsFillCartFill size={20} />
+                  <p>Olá, faça seu login</p>
                 </div>
-              </>
-            ) : (
-              <div
-                id="userLoginOrRegister"
-                onClick={() => {
-                  router.push(`/${NameStore}/loginUser`);
-                }}
-              >
-                <p>Olá, faça seu login</p>
-              </div>
-            )}
-          </FourthContainer>
+              )}
+            </FourthContainer>
+            )
+          }
         </NavbarContainerContent>
         <NavbarFooterExtendedContent>
           <SearchProducts>
