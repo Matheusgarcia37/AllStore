@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import api from '../api/api';
 import { AuthContext } from '../contexts/AuthContext';
 import { FaUpload } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 //Pagina de login/cadastro
 export default function Home() {
   const inputFile = useRef(null);
@@ -96,10 +97,21 @@ export default function Home() {
       formData.append('data', JSON.stringify(registroState));
       const response = await api.post('/store/', formData);
       if(response.status === 200){
-        alert('Cadastro realizado com sucesso!');
+        Swal.fire({
+          title: 'Sucesso!',
+          text: 'Cadastro realizado com sucesso!',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      Swal.fire({
+        title: 'Erro!',
+        text: 'Erro ao cadastrar!',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
     }
   }
 
@@ -114,6 +126,13 @@ export default function Home() {
     }
     catch (error) {
       console.log(error);
+      Swal.fire
+      ({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Usuário ou senha incorretos!',
+      })
+
     }
   }
 
