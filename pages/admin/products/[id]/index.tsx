@@ -31,7 +31,8 @@ export default function Index(){
     const [produto, setProduto] = useState({
         name: '',
         description: '',
-        price: '',
+        price: 0,
+        stock: 0,
         featured: false,
     });
 
@@ -47,6 +48,7 @@ export default function Index(){
                     description: data.description,
                     price: data.price,
                     featured: data.featured,
+                    stock: data.stock,
                 });
                 setTagsSelecionadas(data.Tag.map(tag => ({
                     value: tag.id,
@@ -123,6 +125,7 @@ export default function Index(){
                 name: produto.name,
                 description: produto.description,
                 price: produto.price,
+                stock: produto.stock,
                 featured: produto.featured,
                 tags: tagsSelecionadas.map(tag => tag.value)
             }
@@ -150,7 +153,7 @@ export default function Index(){
     return (
         <Container> 
            <HeaderPage>
-                <h1>Novo produto</h1>
+                <h1>Alterar produto</h1>
            </HeaderPage>
             <Content>
                 <Formulario>
@@ -170,6 +173,14 @@ export default function Index(){
                         <span>Preço</span>
                         <input type="text" value={produto.price} name='price' onChange={handleChangeProduto} />
                     </label>
+                    {
+                        user?.Store?.typeOfStore === "saleOfProducts" && (
+                            <label>
+                                <span>Quantidade em estoque</span>
+                                <input type="number" value={produto.stock} name='stock' onChange={handleChangeProduto} />
+                            </label>
+                        )
+                    }
                     {/* Categorias */}
                     <Categorias>
                         <label>Categorias</label>

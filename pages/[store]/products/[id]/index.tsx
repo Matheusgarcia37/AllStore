@@ -6,6 +6,9 @@ import styled from "styled-components";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { StoreContext } from "../../../../components/Layout";
+import Swal from "sweetalert2";
+
+import emptyImage from "../../../../images/sem-foto.webp";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -57,25 +60,14 @@ export default function ProductPage() {
   
           router.push(`/${store?.name}/cart`);
         }
-       /*  if(userClient?.Orders?.find(order => order.finished === false)) {
-          await api.put(`/order/addProduct`, {
-            productId: product.id,
-            orderId: userClient.Orders.find(order => order.finished === false).id,
-          });
-
-          router.push(`/${store?.name}/cart`);
-        } else {
-          await api.post("/order", {
-            productId: product.id,
-            clientId: userClient.id,
-            value: product.price,
-          });
-  
-          router.push(`/${store?.name}/cart`);
-        } */
-       
       } catch (error) {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${error.response.data.error}`,
+        });
+
       }
     } else {
       router.push(`/${store?.name}/loginUser`);
@@ -86,7 +78,7 @@ export default function ProductPage() {
     <div>
       {product && (
         <Content>
-          {product.Upload.length > 0 && (
+          {product.Upload.length > 0 ? (
             <Illustration>
               <DestaqueImage>
                 <Image
@@ -159,6 +151,18 @@ export default function ProductPage() {
                   ))}
                 </OtherImages>
               </>
+            </Illustration>
+          ) : (
+            <Illustration>
+              <DestaqueImage>
+                <Image
+                  height={400}
+                  width={400}
+                  layout="intrinsic"
+                  src={emptyImage}
+                  alt="imagem do produto"
+                />
+              </DestaqueImage>
             </Illustration>
           )}
           <Description>

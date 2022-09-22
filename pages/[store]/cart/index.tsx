@@ -49,7 +49,11 @@ export default function Index() {
       });
       getCurrentOrder();
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${error.response.data.error}`,
+      });
     }
   };
 
@@ -89,7 +93,7 @@ export default function Index() {
         cancelButtonColor: "#d33",
         confirmButtonText: "Sim, finalizar!",
       }).then(async (result) => {
-        if(result.isConfirmed){
+        if (result.isConfirmed) {
           await api.put(`/order/finishOrder`, {
             orderId: cart.id,
           });
@@ -100,7 +104,7 @@ export default function Index() {
             confirmButtonText: "Ok",
           }).then((result) => {
             if (result.isConfirmed) {
-                router.push(`/${store?.name}`)
+              router.push(`/${store?.name}`);
             }
           });
         }
@@ -133,12 +137,15 @@ export default function Index() {
                     <tr key={orderProduct.productId}>
                       <td>{orderProduct.Product.name}</td>
                       <td>
-                        {" "}
-                        <Image
-                          src={orderProduct.Product.Upload[0].url || emptyImage}
-                          width={100}
-                          height={100}
-                        />
+                        {orderProduct.Product.Upload[0]?.url ? (
+                          <Image
+                            src={orderProduct.Product.Upload[0].url}
+                            width={100}
+                            height={100}
+                          />
+                        ) : (
+                          <Image src={emptyImage} width={100} height={100} />
+                        )}
                       </td>
                       <td>
                         R$ {Number(orderProduct.Product.price).toFixed(2)}
