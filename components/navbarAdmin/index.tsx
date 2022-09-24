@@ -13,6 +13,7 @@ import api from '../../api/api';
 import { GoListUnordered } from 'react-icons/go';
 import { FiUsers } from 'react-icons/fi';
 import { useRouter } from 'next/router';
+import semFoto from '../../images/sem-foto.webp'
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
     const [image, setImage] = useState(null)
@@ -43,11 +44,17 @@ export default function NavbarAdmin( { children } ) {
         <ContainerAdmin>
             <MenuBar>
                 <HeaderMenu>
-                    <Logo>{user && (
-                        <Image src={user.Store?.Upload.url} width={70} height={70} onClick={() => {
-                            router.push('/' + user.Store.name);
-                        }} style={{cursor:'pointer'}}></Image>
-                    )}</Logo>
+                    <Logo>{user && 
+                        user.Store?.Upload?.url ? (
+                            <Image src={user.Store?.Upload.url} width={70} height={70} onClick={() => {
+                                router.push('/' + user.Store.name);
+                            }} style={{cursor:'pointer'}}></Image>
+                        ) : (
+                            <Image src={semFoto} width={70} height={70} onClick={() => {
+                                router.push('/' + user.Store.name);
+                            }} style={{cursor:'pointer'}}></Image>
+                        )
+                    }</Logo>
                     <Logout onClick={logout}>
                         <VscSignIn size={20} color="#fff" />
                     </Logout>

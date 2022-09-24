@@ -269,8 +269,13 @@ export const FourthContainer = styled.div`
   color: ${({theme}) => theme.colors.secondary};
   svg {
     cursor: pointer;
-  }
+    color: ${({theme}) => theme.colors.secondary};
 
+    :hover {
+      opacity: .8;
+    }
+  }
+ 
   #userLoginOrRegister {
     align-items: center;
     font-size: .9rem;

@@ -38,6 +38,7 @@ export default function Orders() {
                   <th>Valor Total</th>
                   <th>Produtos</th>
                   <th>Data do Pedido</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,6 +71,9 @@ export default function Orders() {
                         </td>
                         <td>
                           {dateFormatedString}
+                        </td>
+                        <td>
+                          {orderProduct.approved === false ? 'Pedido não aprovado' : orderProduct.approved === true ? 'Pedido aprovado' : 'Pedido em andamento'}
                         </td>
                       </tr>
                     );  

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import semFoto from '../../images/sem-foto.webp'
 import {
   NavbarContainer,
   SecondContainer,
@@ -135,7 +136,12 @@ function Navbar() {
             >
               &#8801;
             </OpenLinksButton>
-            <Image src={store?.Upload?.url} width={100} height={100} />
+            { store?.Upload?.url ? (
+              <Image src={store?.Upload?.url} width={100} height={100} />
+            ) : (
+              <Image src={semFoto} width={100} height={100} />
+            )}
+            
           </FirstContainer>
           <SecondContainer>
             <NavbarLinkContainer>
