@@ -132,7 +132,6 @@ export default function Orders() {
           </Button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 }

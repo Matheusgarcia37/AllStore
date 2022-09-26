@@ -212,14 +212,16 @@ const Pagination = styled.div`
   right: 0;
   justify-content: center;
   button {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
     margin-right: 1rem;
     border: none;
-    background-color: ${({ theme }) => `RGB(${theme.colors.secondary})`};
-    color: white;
+    background-color: white;
     font-size: 1rem;
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 5px;
+    
+   
     &:hover {
       opacity: 0.8;
     }
