@@ -224,7 +224,6 @@ export default function Index(){
                         <select name='typeOfStore' value={ store.typeOfStore } onChange={handleStore}>
                             <option value="serviceSale">Venda de serviço</option>
                             <option value="saleOfProducts">Venda de Produto</option>
-                            <option value="showcase">Vitrine</option>
                         </select>
                     </div>
                     <label>

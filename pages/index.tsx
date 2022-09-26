@@ -161,7 +161,6 @@ export default function Home() {
             <select value={registroState.typeOfStore} onChange={onChangeRegistro} name="typeOfStore">
               <option value="serviceSale">Venda de serviço</option>
               <option value="saleOfProducts">Venda de produto</option>
-              <option value="showcase">Vitrine</option>
             </select>
             <input type="text" placeholder="Nome da loja" value={registroState.nameStore} name="nameStore" onChange={onChangeRegistro} />
             {/* sobre */}

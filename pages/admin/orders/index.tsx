@@ -383,8 +383,8 @@ const HeaderPage = styled.div`
                 font-size: 1rem;
                 margin-right: 0.5rem;
             }
-            //width: 250px
-            flex: 1;
+            //width: 250px;
+            //flex: 1;
             margin: 0 0.5rem;
         }
          //flex wrap
