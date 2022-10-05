@@ -7,6 +7,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Table from "react-bootstrap/Table";
 import { AiFillEdit } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
+import Swal from "sweetalert2";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const { user } = useContext(AuthContext);
@@ -14,42 +15,47 @@ export default function Products() {
   const limit = 10;
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  
+  const getProducts = async () => {
+    const response = await api.put("/products", {
+      storeId: user?.Store.id,
+      skip: skip,
+      limit: limit,
+    });
+    setTotalProducts(response.data[0]);
+    setTotalPages(Math.ceil(response.data[0] / limit));
+    setProducts(response.data[1]);
+  };
+
   useEffect(() => {
     if (user) {
-      const getProducts = async () => {
-        const response = await api.put("/products", {
-          storeId: user?.Store.id,
-          skip: skip,
-          limit: limit,
-        });
-        setTotalProducts(response.data[0]);
-        setTotalPages(Math.ceil(response.data[0] / limit));
-        setProducts(response.data[1]);
-      };
       getProducts();
     }
   }, [user]);
 
   useEffect(() => {
     if (user) {
-      const getProducts = async () => {
-        const response = await api.put("/products", {
-          storeId: user?.Store.id,
-          skip: skip,
-          limit: limit,
-        });
-        setTotalProducts(response.data[0]);
-        setTotalPages(Math.ceil(response.data[0] / limit));
-        setProducts(response.data[1]);
-      };
       getProducts();
     }
   }, [skip, limit]);
 
   const deleteProduct = async (id) => {
-    await api.delete(`/products/${id}`);
-    const response = await api.get("/products", user?.Store.id);
-    setProducts(response.data);
+    Swal.fire({
+      title: "Tem certeza que deseja excluir este produto?",
+      text: "Você não poderá reverter esta ação!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, excluir!",
+      cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if(result.isConfirmed){
+          await api.delete(`/products/${id}`);
+          getProducts();
+          Swal.fire("Excluído!", "O produto foi excluído com sucesso.", "success");
+        }
+      });
   };
   return (
     <>

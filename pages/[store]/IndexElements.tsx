@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const ContainerIndex = styled.div`
+    margin-top: 1rem;
     width: 100%;
     h1 {
         font-size: 2rem;

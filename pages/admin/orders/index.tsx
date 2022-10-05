@@ -80,6 +80,7 @@ export default function Index() {
       showCancelButton: true,
       confirmButtonText: `Sim`,
       denyButtonText: `Não`,
+      cancelButtonText: "Cancelar",
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {

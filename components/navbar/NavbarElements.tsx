@@ -251,7 +251,7 @@ export const ThirdContainer = styled.div`
   align-items: center;
 
   @media (max-width: 1640px) {
-    flex: 65%;
+    flex: 28%;
     }
   
   @media (max-width: 700px) {

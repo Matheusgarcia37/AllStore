@@ -29,7 +29,7 @@ export default function Orders() {
         }
     },[userClient]);
   return (
-    <div>
+    <div style={{marginTop: '1rem'}}>
       <h1>Historico de seus pedidos</h1>
       <Table hover bordered>
               <thead>
