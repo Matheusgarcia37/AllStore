@@ -243,6 +243,7 @@ const Products = styled.div`
         color: ${({ theme }) => theme.colors.secondary};
     }
     ul {
+        margin-top: 1rem;
         margin-left: 0;
         padding-left: 0;
         display: grid;
