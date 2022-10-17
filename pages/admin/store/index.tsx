@@ -289,6 +289,7 @@ export default function Index(){
                     </ContentColorsPicker>
                     {/* endereços */}
                     <ContainerArrayForm>
+                        <h4>Endereços</h4>
                         {addresses.map((address, index) => (
                             <div key={index}>
                                  <label>
@@ -311,7 +312,7 @@ export default function Index(){
                                     <span>Número</span>
                                     <input type="text" name='number' value={address.number} onChange={ (e) => {handleAddress(e, index)}}/>
                                 </label>
-                                <label>
+                                <label style={{alignItems: 'center'}}>
                                     <span>Principal</span>
                                     <input type="checkbox" name='main' checked={address.main} onChange={ (e) => {handleAddressMain(e, index)}} />
                                 </label>
@@ -322,6 +323,7 @@ export default function Index(){
                     </ContainerArrayForm>
                     {/* contatos */}
                     <ContainerArrayForm>
+                        <h4>Contatos</h4>
                         {contacts.map((contact, index) => (
                             <div key={index}>
                                 <label>
@@ -332,7 +334,7 @@ export default function Index(){
                                     <span>Telefone</span>
                                     <input type="text" name='phone' value={contact.phone} onChange={ (e) => {handleContacts(e, index)}}/>
                                 </label>
-                                <label>
+                                <label style={{alignItems: 'center'}}>
                                     <span>Principal</span>
                                     <input type="checkbox" name='main' checked={contact.main} onChange={ (e) => {handleContactsMain(e, index)}}/>
                                 </label>
@@ -393,7 +395,7 @@ const Formulario = styled.div`
         display: flex;
         flex-direction: column;
         span {
-            padding: 0.5rem;
+            padding: 0.5rem 0;
             font-size: .75rem;
             font-weight: bold;
             color: black;
@@ -412,33 +414,31 @@ const ContainerArrayForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
     margin-bottom: 1rem;
     margin-top: 1rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    h4 {
+        font-size: 1.4rem;
+    }
     div{
         display: flex;
-        width: 100%;
         justify-content: flex-start;
-    }
-    label {
-        display: flex;
-        flex-direction: column;
-        margin-right: 1rem;
-        span {
-            padding: 0.5rem;
-            font-size: .75rem;
-            font-weight: bold;
-            color: black;
-            text-transform: uppercase;
-        }
-        input {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: .75rem;
-            color: black;
+        flex-wrap: wrap;
+
+        border: 1px solid #ccc;
+        padding: .4rem;
+        border-radius: 10px;
+        margin-bottom: .4rem;
+        label {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            margin: 0.5rem 0.5rem;
+
         }
     }
+    
     button {
         padding: 0.5rem;
         border: 1px solid #ccc;
