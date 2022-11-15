@@ -137,9 +137,9 @@ function Navbar() {
               &#8801;
             </OpenLinksButton>
             { store?.Upload?.url ? (
-              <Image src={store?.Upload?.url} width={100} height={100} />
+              <Image src={store?.Upload?.url} width={80} height={80} />
             ) : (
-              <Image src={semFoto} width={100} height={100} />
+              <Image src={semFoto} width={80} height={80} />
             )}
             
           </FirstContainer>

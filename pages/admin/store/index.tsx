@@ -180,6 +180,7 @@ export default function Index(){
         formData.append('secondaryColor', state2.color.r + ',' + state2.color.g + ',' + state2.color.b);
         formData.append('Contact', JSON.stringify(contacts));
         formData.append('Address', JSON.stringify(addresses));
+        if (typeof file !== 'string')
         formData.append('file', file);
         
         // const data = {
