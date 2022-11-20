@@ -4,9 +4,11 @@ export const ContainerIndex = styled.div`
     margin-top: 1rem;
     width: 100%;
     h1 {
-        font-size: 2rem;
+        font-size: 2.4rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
         color: ${({ theme }) => theme.colors.primary};
-        text-shadow: 1px 1px 1px ${({ theme }) => theme.colors.secondary};
+        //text-shadow: 1px 1px 1px ${({ theme }) => theme.colors.secondary};
     }
 `;
 

@@ -64,14 +64,14 @@ const Container = styled.div`
     color: ${({ theme}) => theme.colors.primary};
     //sombra
     text-transform: uppercase;
-    text-shadow: 0px 0px 3px ${({ theme }) => theme.colors.secondary};
+    //text-shadow: 0px 0px 3px ${({ theme }) => theme.colors.secondary};
     margin: 2rem 0 1rem 0;
    }
     p {
       font-size: 1.2rem;
       color: ${({ theme }) => theme.colors.primary};
       //sombra
-      text-shadow: 0px 0px 3px ${({ theme }) => theme.colors.secondary};
+      //text-shadow: 0px 0px 3px ${({ theme }) => theme.colors.secondary};
       font-weight: 400;
     }
   }

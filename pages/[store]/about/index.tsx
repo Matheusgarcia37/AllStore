@@ -48,7 +48,7 @@ const Text = styled.text`
     font-weight: 500;
     text-align: justify;
     color: ${({ theme }) => theme.colors.primary};
-    text-shadow: 0px 0px 2px ${({ theme }) => theme.colors.secondary};
+    //text-shadow: 0px 0px 2px ${({ theme }) => theme.colors.secondary};
     .rslines {
         text-indent: 3ch;
         margin-bottom: 1rem;

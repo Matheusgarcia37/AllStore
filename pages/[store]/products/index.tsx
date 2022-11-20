@@ -218,11 +218,12 @@ const HeaderPage = styled.div`
     width: 100%;
     color: ${({ theme }) => theme.colors.primary};
     //text shadow color secondary
-    text-shadow: 1px 1px 2px ${({ theme }) => theme.colors.secondary};
+    //text-shadow: 1px 1px 2px ${({ theme }) => theme.colors.secondary};
 
 
     h1 {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
+        font-weight: bold;
     }
 
     @media (max-width: 768px) {
