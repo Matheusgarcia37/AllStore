@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BiLogOut } from 'react-icons/bi';
+import { RiCustomerService2Line } from 'react-icons/ri';
 import { VscSignIn } from 'react-icons/vsc';
 import { StoreContext } from '../Layout';
 import { AiOutlineRight } from 'react-icons/ai';
@@ -14,6 +15,7 @@ import { GoListUnordered } from 'react-icons/go';
 import { FiUsers } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import semFoto from '../../images/sem-foto.webp'
+import empityProfileImage from '../../images/photo.png'
 export default function NavbarAdmin( { children } ) {
     const { user, logout } = useContext(AuthContext);
     const [image, setImage] = useState(null)
@@ -59,7 +61,12 @@ export default function NavbarAdmin( { children } ) {
                         <VscSignIn size={20} color="#fff" />
                     </Logout>
                     <Profile>
-                        <img src={image} alt="profile" />
+                        {console.log(image, empityProfileImage)}
+                        {image ? (
+                              <img src={image} alt="profile" />
+                        ) : (
+                            <Image src={empityProfileImage} alt="profile" height={"100px"} width={"100px"}/>
+                        )}
                         <input id="changeImageInput" type="file" style={{display: 'none'}} onChange={changeImageProfile}>
                         </input>  
                         <label id="changeImage" htmlFor="changeImageInput"><BsCameraFill /></label>
@@ -85,6 +92,11 @@ export default function NavbarAdmin( { children } ) {
                             </Link>
                         </Item>
                     )}
+                    <Item>
+                        <Link href="/admin/customers">
+                            <a><RiCustomerService2Line/> Clientes <AiOutlineRight/></a>
+                        </Link>
+                    </Item>
                     <Item>
                         <Link href="/admin/users">
                             <a><FiUsers/> Usuários <AiOutlineRight/></a>

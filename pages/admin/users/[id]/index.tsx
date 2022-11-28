@@ -15,6 +15,7 @@ export default function EditUsers() {
   const [editUser, setEditUser] = useState({
     username: "",
     password: "",
+    storeId: null,
     confirmPassword: "",
     id: "",
   });
@@ -26,6 +27,7 @@ export default function EditUsers() {
     const { data } = await api.post(`/user/getUserById`, { id });
     setEditUser({
       username: data.username,
+      storeId: data.Store.id,
       password: "",
       confirmPassword: "",
       id: data.id,
@@ -58,6 +60,7 @@ export default function EditUsers() {
     }
     const formData = {
       id: editUser.id,
+      storeId: editUser.storeId,
       username: editUser.username,
       password: editUser.password,
     };

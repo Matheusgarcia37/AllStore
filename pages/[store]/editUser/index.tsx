@@ -17,6 +17,7 @@ export default function EditUserClient() {
   const [editUser, setEditUser] = useState({
     username: "",
     password: "",
+    storeId: null,
     confirmPassword: "",
     name: "",
     email: "",
@@ -31,6 +32,7 @@ export default function EditUserClient() {
       {
         username: data.username,
         password: "",
+        storeId: data.Store.id,
         confirmPassword: "",
         name: data.Person.name,
         email: data.Person.email,
@@ -67,6 +69,7 @@ export default function EditUserClient() {
     const formDataUser = {
       username: editUser.username,
       password: editUser.password,
+      storeId: editUser.storeId,
       id: userClient.id,
     };
 

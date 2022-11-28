@@ -89,7 +89,7 @@ export default function Products() {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.name}</td>
-                  <td>R$ {product.price}</td>
+                  <td>R$ {Number(product.price).toFixed(2)}</td>
                   <td>{product.Tag[0]?.name}</td>
                   {user?.Store?.typeOfStore === "saleOfProducts" && (
                     <td>{product.stock}</td>
