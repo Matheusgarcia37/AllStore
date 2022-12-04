@@ -65,7 +65,7 @@ export const NavbarContainerContent = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  height: 80px;
+  
   background-color: ${({theme}) => theme.colors.primary};
 `;
 
@@ -227,7 +227,10 @@ export const FirstContainer = styled.div`
   justify-content: flex-end;
   padding-right: 20px;
   justify-content: flex-start;
- 
+  img {
+    padding: 10px!important;
+    border-radius: 25px;
+  }
 
   @media (max-width: 700px) {
     flex: 50%;
@@ -328,7 +331,9 @@ export const SearchProducts = styled.form`
     font-size: 1.2rem;  
     padding-right: 42px;
     :focus {
-      
+      box-shadow: 0 0 0 0;
+      border: 0 none;
+      outline: 0;
     }
   }
   button {

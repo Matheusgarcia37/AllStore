@@ -106,15 +106,28 @@ function Navbar() {
       <NavbarInnerContainer>
         <NavBarHeaderContact>
           <NavBarHeaderContactLeft>
-            <a href="#">
-              <AiOutlineFacebook size={20} />
-            </a>
-            <a href="#">
-              <AiOutlineTwitter size={20} />
-            </a>
-            <a href="#">
-              <AiOutlineInstagram size={20} />
-            </a>
+            {
+              store?.facebook && (
+                <a href={store.facebook}>
+                  <AiOutlineFacebook size={20} />
+                </a>
+              )
+            }
+            {
+              store?.twitter && (
+                <a href={store.twitter}>
+                  <AiOutlineTwitter size={20} />
+                </a>
+              )
+            }
+
+            {
+              store?.instagram && (
+                <a href={store.instagram}>
+                  <AiOutlineInstagram size={20} />
+                </a>
+              )
+            }                
           </NavBarHeaderContactLeft>
           <NavBarHeaderContactRight>
             <p>
@@ -147,7 +160,6 @@ function Navbar() {
             <NavbarLinkContainer>
               <Link href={`/${NameStore}`}>
                 <NavbarLink>
-                  {" "}
                   <AiOutlineHome></AiOutlineHome> Home
                 </NavbarLink>
               </Link>
@@ -255,21 +267,33 @@ function Navbar() {
             </Link>
           </NavbarExtendedLinksContainer>
           <RedesSociaisBarExtended>
-            <Link href="#">
-              <a>
-                <AiOutlineFacebook size={30} />
-              </a>
-            </Link>
-            <Link href="#">
-              <a>
-                <AiOutlineInstagram size={30} />
-              </a>
-            </Link>
-            <Link href="#">
-              <a>
-                <AiOutlineTwitter size={30} />
-              </a>
-            </Link>
+           
+              {
+                store?.facebook && (
+                  <a href={store.facebook}>
+                    <AiOutlineFacebook size={30} />
+                  </a>
+                )
+              }
+
+            
+              {
+                store?.instagram && (
+                  <a href={store.instagram}>
+                    <AiOutlineInstagram size={30} />
+                  </a>
+                )
+              }
+          
+           
+              {
+                store?.twitter && (
+                  <a href={store.twitter}>
+                    <AiOutlineTwitter size={30} />
+                  </a>
+                )
+              }
+           
           </RedesSociaisBarExtended>
         </NavbarExtendedLinkContainer>
       </NavbarExtendedContainer>

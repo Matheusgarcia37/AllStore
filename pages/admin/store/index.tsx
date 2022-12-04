@@ -84,6 +84,9 @@ export default function Index(){
         about: '',
         primaryColor: '',
         secondaryColor: '',
+        instagram: '',
+        facebook: '',
+        twitter: '',
     })
 
     const [file, setFile] = useState(null);
@@ -149,6 +152,9 @@ export default function Index(){
                     about: data.about,
                     primaryColor: data.Theme.primaryColor,
                     secondaryColor: data.Theme.secondaryColor,
+                    instagram: data.instagram,
+                    facebook: data.facebook,
+                    twitter: data.twitter,
                 });
                 setContacts(data.Contact.map((contact) => ({
                     main: contact.main,
@@ -180,6 +186,9 @@ export default function Index(){
         formData.append('secondaryColor', state2.color.r + ',' + state2.color.g + ',' + state2.color.b);
         formData.append('Contact', JSON.stringify(contacts));
         formData.append('Address', JSON.stringify(addresses));
+        formData.append('instagram', store.instagram !== '' ? store.instagram : null);
+        formData.append('facebook', store.facebook !== '' ? store.facebook : null);
+        formData.append('twitter', store.twitter !== '' ? store.twitter : null);
         if (typeof file !== 'string')
         formData.append('file', file);
         
@@ -344,6 +353,18 @@ export default function Index(){
                         ))}
                         <ButtonAdd onClick={addContacts}>Adicionar contato</ButtonAdd>
                     </ContainerArrayForm>
+                    <label>
+                        <span>Instagram</span>
+                        <input type="text" name='instagram' value={ store.instagram }  onChange={handleStore} />
+                    </label>
+                    <label>
+                        <span>Facebook</span>
+                        <input type="text" name='facebook' value={ store.facebook }  onChange={handleStore} />
+                    </label>
+                    <label>
+                        <span>Twitter</span>
+                        <input type="text" name='twitter' value={ store.twitter }  onChange={handleStore} />
+                    </label>
                     <ButtonAlterar type="button" onClick={handleAlterar}>Alterar</ButtonAlterar>
                 </Formulario>
 

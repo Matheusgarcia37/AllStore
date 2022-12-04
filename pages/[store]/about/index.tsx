@@ -41,6 +41,7 @@ const Title = styled.h1`
     font-weight: bold;
     color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 1rem;
+    margin-top: 1rem;
 `;
 
 const Text = styled.text`
